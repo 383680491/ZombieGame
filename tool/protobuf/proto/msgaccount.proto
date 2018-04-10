@@ -1,0 +1,55 @@
+option optimize_for = CODE_SIZE; //因为使用MessageLite需要加此选项
+
+//msgid = 7001
+message MsgReqAccount{
+    optional int32 opt = 1; //操作类型 1表示获取信息 2表示获取设备标识 3表示绑定帐号 4表示检查设备标识是否绑定 5表示GM获取服务器列表
+    optional string account = 2;  //帐号
+    optional string pass_word = 3; //密码
+    optional string device_code = 4; //设备标识
+    optional string role_token = 5; //透传用户token
+    optional int32 platform_id = 6; //平台编号(0-不使用sdk)
+    optional string platform_uid = 7; //玩家在平台的uid
+    optional string exdata1 = 8; //额外数据1
+    optional string exdata2 = 9; //额外数据2
+}
+
+message MsgAnsAccount{
+    optional int32 opt = 1; //操作类型 1表示获取信息 2表示获取设备标识 3表示绑定帐号 4表示检查设备标识是否绑定
+    optional MsgServerInfo server_info = 2; //服务器信息
+    optional string device_code = 3; //设备标识
+    optional int32 is_bind = 4; //设备标识是否已绑定 0表示未绑定 非0表示已绑定
+    optional string platform_token = 5; //平台透传token
+}
+
+message MsgServerInfo{
+    repeated MsgServerUnit server_list = 1; //服务器组
+    repeated MsgServerNotice notice_list = 2; //公告列表
+}
+
+message MsgServerUnit{
+    optional string ip = 1;     //服务器IP
+    optional int32 port = 2;    //服务器端口
+    optional string name = 3;   //服务器名称
+    optional int32 time = 4;    //开服时刻
+    optional int32 count = 5;   //服务器在线人数
+    optional int32 number = 6;  //设备标识在此服务器上角色数量
+    optional string http_url = 7;  //回调地址
+    optional int32 zone_id = 8; //大区ID
+    repeated MsgServerRoleUnit role_list = 9; //此服务器上角色列表
+    optional string domain_name = 10;  //服务器域名(用以支持ipv6)
+}
+
+message MsgServerNotice{
+    optional int32 id = 1;      //公告ID
+    optional string title = 2;  //公告标题
+    optional string notice = 3; //公告内容
+    optional int32 type = 4;    //公告类型 1表示临时公告 2表示活动公告
+}
+
+message MsgServerRoleUnit{
+    optional int32 head = 1;           //头像
+    optional int32 level = 2;          //战队等级
+    optional int32 vip_level = 3;      //vip等级
+    optional string nick_name = 4;     //角色昵称
+}
+

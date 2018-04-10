@@ -1,0 +1,16 @@
+option optimize_for = CODE_SIZE; //因为使用MessageLite需要加此选项
+
+message PBMsgHead{
+    optional int32 version = 1; //通讯协议版本号
+    optional int32 time = 2;    //服务器当前时间
+    optional int32 msgact = 3;  //服务器透传字段
+    optional int32 msgtype = 4; //协议数据类型 1表示请求包 2表示响应包
+    optional int32 msgid = 5;   //协议数据ID 例如 1001表示请求角色简略信息 1002表示请求登录
+    optional int32 msgret = 6;  //通讯协议出错码 只用在响应包中 非0表示出错 出错情况下没有MsgBody
+    optional string token = 7;  //交互口令码
+}
+
+message PBMsgEmpty{
+
+}
+

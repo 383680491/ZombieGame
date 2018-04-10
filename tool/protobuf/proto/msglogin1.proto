@@ -1,0 +1,38 @@
+option optimize_for = CODE_SIZE; //因为使用MessageLite需要加此选项
+
+import "msgcomm.proto";
+
+//msgid = 1001
+message MsgReqRoleBrief{
+    optional string user_token = 1;  //平台帐号
+    optional string device_code = 2; //设备标识
+}
+
+message MsgAnsRoleBrief{
+    repeated MsgRoleBrief role_brief = 1; //角色简略信息数组
+}
+
+message MsgRoleBrief{
+    optional int32 gid = 1;
+    optional int32 level = 2;       //等级
+    optional int32 is_male = 3;     //性别 非0 表示男性 0 表示女性
+    optional int32 element = 4;     //五行 1表示金 2表示木 3表示水 4表示火 5表示土
+    optional string nick_name = 5;  //昵称
+}
+
+//msgid = 1002
+message MsgReqLogin{
+    optional int32 gid = 1;
+    optional string user_token = 2;
+    optional string device_code = 3;
+    optional string platform = 4;
+    optional string password = 5;
+    optional string only_token = 6;
+}
+
+message MsgAnsLogin{
+    optional int32 gid = 1;
+    optional MsgRoleInfo role_info = 2; //角色基础信息
+    optional int32 zone_id = 3; //区服Id
+}
+

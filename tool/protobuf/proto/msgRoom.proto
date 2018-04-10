@@ -1,0 +1,279 @@
+
+
+//创建房间请求 11001
+message create_room_req{
+	required int32 roomtype = 1;				//房间类型1-初级  2-中级  3-高级
+	optional int32 playtype = 2;				//玩法 1-斗牛  2-麻将  3-其他  预留
+	optional int32  version = 3;					//版本
+}
+
+
+//创建房间返回  返回msgId  = 1
+message create_room_resp{
+	required int32 result = 1;			//返回结果 0成功  -600你已在房间  -601房卡不足
+	required int32 roomid = 2;			//房间号
+	required int32 place = 3;			  //座位位置
+}
+
+
+
+//加入房间请求
+message room_join_req{
+	required int32 roomid = 1;			//房间号
+}
+
+
+//加入房间返回  返回msgId  = 2
+message room_join_resp{
+	required int32 result = 1;			//返回结果 0成功  -604房间不存在  -605房间已满 -606 玩家不存在
+}
+
+
+
+//解散房间
+message room_dissolve_req{
+	required int32 roomid = 1;	//随意填写
+}
+
+
+//房间解散玩家信息  
+message dissolve_player_info{
+	required int32 place = 1;	//玩家名字
+	required int32 status = 2;	    //2-等待 1-同意 0-反对
+}
+
+
+//解散返回   msgId  = 3
+message room_dissolve_resp{
+	required int32  result = 1;     //0成功返回  -604房间不存在  -655 不能重复解散  -656 不在解散状态
+	optional int32  place = 2;	//发起解散者
+	optional int32  endtime = 3;    //结束时间
+}
+
+
+//退出房间请求
+message quit_room_req{
+	required int32 roomid = 1;	//随意填写
+}
+
+
+//退出房间返回  msgId  = 4
+message quit_room_resp{
+	required int32 result = 1;   //0成功返回  -604房间不存在
+}
+
+
+//退出房间通知  msgId  = 5
+message quit_room_notify{
+	required int32 quitplace = 1;   //退出玩家位置
+}
+
+
+
+
+
+//房间列表请求
+message get_room_list_req{
+	required int32 game_type = 1;	//随意填写 1-斗牛   2-麻将  3-其他
+	
+}
+
+//房间列表返回  msgId  = 6
+message get_room_resp{
+	repeated room_base_info roomInfo = 1;
+}
+
+
+//加入房间通知  msgId  = 7
+message join_room_notify{
+	required int32 place = 1;
+	repeated notify_role_info roleInfo = 2;   //玩家信息
+	required int32 room_creater = 3;
+}
+
+
+
+
+
+//通知玩家信息
+message notify_role_info{
+	required int32 place =1;   //座位 
+	required int32 roleid = 2;			//角色ID
+	required int32 sex  = 3;			//性别
+	required int32 goldcoin = 4;			//金币
+	required int32 goldbean = 5;			//金豆
+	required string nickname = 6;		//用户昵称
+	required string head = 7;			//头像
+	required int32 status = 8;			//玩家状态 1在线 0掉线 2离开
+	optional string ip = 9;				//IP地址
+	required int32 viplevel=10; //vip等级
+	required int32 vipexp=11; // vip经验
+}
+
+
+//房间列表返回  msgId  = 6
+message room_base_info{
+	required string roomname = 1;   //房间名称
+	required int32 needMaxGold = 2;   //需要最大金币
+	required int32 needMinGold = 3;   //需要最大金币
+	required int32 baseGold = 4;   //底分
+	required int32 peopleCount = 5;   //房间人数
+}
+
+
+
+//打牌过程中玩家信息
+message rolebaseinfo{
+	required int32 place = 1;			//位置
+	required int32 roleid = 2;			//角色ID
+	required int32 sex  = 3;			//性别
+	required int32 goldcoin = 4;			//金币
+	required int32 goldbean = 5;			//金豆
+	required string nickname = 6;		//用户昵称
+	required string head = 7;			//头像
+	required int32 status = 8;			//玩家状态 1在线 0掉线 2离开
+	optional string ip = 9;				//IP地址
+	required int32 viplevel=10; //vip等级
+	required int32 vipexp=11; // vip经验
+	required int32 isInGame=12;   //是否在游戏中
+	required int32 isInRoom=13;   //是否在房间中
+	required int32 roomId=14; // 房间ID
+	required int32 isHand=15;//是否已准备
+	required int32 isPlay=16; //是否在游戏中
+	required int32 isAuto=17;  //是否已经托管
+	required int32 isHalfWayJoin=18;  //是否中途加入
+}
+
+
+
+//玩家进桌后，发送基本信息给玩家
+message notify_dn_GameInfo{
+	required int32 goldBase = 1;		//底分。
+}
+
+
+
+//游戏开始倒计时
+message notify_dn_GAME_READY{
+	required int32 waitTime  	= 1; 		//正式开始前的倒计时时间。
+}
+
+//游戏正式开始
+message notify_dn_GAME_START{	 //无数据
+}
+
+// 先手四张牌。发给每个玩家的
+message notify_dn_SEND_POKER_4{
+	repeated poker_four_info pokers 			= 1; 	 //2唯表：5个玩家的，每个玩家的4张牌	
+	required int32 myMaxCallBet		= 2;	//该玩家最大抢庄倍数（钱不够）		
+	required int32 waitTime			= 3; 	//抢庄剩余时间。
+}
+
+// 某个用户抢庄
+message notify_dn_ONE_CALL_BANKER{
+	required int32 chair			= 1;			//抢庄的用户chair
+	required int32 bet				= 2;			//抢庄的倍率。
+}
+
+//抢庄的结果
+message notify_dn_SURE_BANKER{
+	required int32 bankerChair 	= 1;		//庄家椅子号
+	required int32 bankerBet	 	= 2;		//庄家的倍数	
+	required int32 bankerIsRand	= 3; 	  //是否经历了随机
+	repeated randChairs randChairs = 4; 			//如果经历了随机，参与随机的玩家椅子
+	required int32 waitTime 		= 5;			// 下倍数倒计时。
+	required int32 myMaxAddBet		= 6;			// 该玩家最大下注倍数（钱不够）	
+}
+
+//用户下注
+message notify_dn_ONE_ADD_BET{
+	required int32 chair 		= 1; 		//
+	required int32 bet			= 2; 		//选择的倍数
+}
+
+//所有用户选择倍数结束
+message notify_dn_SURE_BET{
+	repeated betResult bets 		= 1;		//所有用户选择倍数结果 [OX_GAME_PLAYER] 
+}
+
+// 发下第五张牌
+message notify_dn_SEND_POKER_5{
+	repeated poker_last_info poker 		= 1; 		//最后一张牌
+}
+
+// 胜负结果。结算信息
+message notify_dn_GAME_RESULT{
+	repeated result_info resultInfo = 1;	//所有玩家加减金币,	
+	required int32 waitTime 		= 2;			//距离准备开始的倒计时
+}
+
+
+
+message  poker_four_info{
+	required int32 playerid = 1;			//玩家id
+	required int32 place = 2;			//位置
+	required int32 card1 = 3;			//牌1
+	required int32 card2  = 4;			//牌2
+	required int32 card3 = 5;			//牌3
+	required int32 card4 = 6;			//牌4
+}
+
+
+message  poker_last_info{
+	required int32 playerid = 1;			//玩家id
+	required int32 place = 2;			//位置
+	required int32 card5 = 3;			//牌5
+}
+
+message randChairs{
+	required int32 place = 1;			//位置
+}
+
+message betResult{
+	required int32 place = 1;			//位置
+	required int32 bets = 2;			//下注
+}
+
+
+message result_info{
+	required int32 pos = 1;			//位置
+	required int32 nAddGold = 2;			//金币改变数量 
+}
+
+
+
+// 用户叫庄
+message call_bank_req{
+	required int32 callBet = 1;	//用户抢庄数值
+}
+
+// 用户加注
+message add_score_req{ 
+	required int32 bet = 1;	//下注数目
+}
+
+
+// 用户叫庄
+message call_bank_resp{
+	required int32 result	= 1;	//用户抢庄数值
+}
+
+// 用户加注
+message add_score_resp{ 
+	required int32 result = 1;	//下注数目
+}
+
+
+message test_req{
+}
+
+
+//创建房间返回  返回msgId  = 1
+message test_resp{
+	required int32 result = 1;		//返回结果 0成功  -600你已在房间  -601房卡不足
+	required int32 roomid = 2;			//房间号
+	required int32 place = 3;			  //座位位置
+}
+
+
+

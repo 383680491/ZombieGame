@@ -1,0 +1,28 @@
+
+//测试登陆请求
+message test_login_req{
+	required string openid = 1;    //测试平台用户名
+	optional string password = 2;  //密码-缺省值空
+	required int32  serverid = 3;  //大厅服务id
+}		
+
+
+
+//测试登陆响应
+message test_login_resp{
+	required int32 userId = 1;		//服务器给玩家分配的userId
+	required string openid = 2;    //服务器给玩家分配的唯一用户名 userName + "_" + serverId
+	required string nickname = 3;  //昵称，测试环境统一昵称为test
+	required int32  roomcard = 4;  //开房卡数量
+	required int32  goldcoin = 5;  //金币数量
+	required int32  goldbean = 6;  //金豆数量  人民币道具
+	required string  ip = 7;       //客户端IP地址
+	required string  headurl = 8;  //头像地址
+	required int64  servertime = 9;  //服务器时间  unix时间戳
+	required int32  gender = 10;   //性别 1-男   2-女
+}	
+
+//心跳
+message heart_beat{
+	optional string timestamp = 1;
+}	

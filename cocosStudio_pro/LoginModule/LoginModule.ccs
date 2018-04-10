@@ -1,0 +1,344 @@
+<Solution>
+  <PropertyGroup Name="LoginModule" Version="2.3.0.1" Type="CocosStudio" />
+  <SolutionFolder>
+    <Group ctype="ResourceGroup">
+      <RootFolder Name=".">
+        <Folder Name="fonts">
+          <File Name="text_normal.ttf" />
+        </Folder>
+        <Folder Name="csb">
+          <Folder Name="login">
+            <Project Name="LoginAgain.csd" Type="Layer" />
+            <Project Name="DelayEffectLayer.csd" Type="Layer" />
+            <Project Name="hotUpdate.csd" Type="Layer" />
+            <Project Name="LogoALi.csd" Type="Scene" />
+          </Folder>
+        </Folder>
+        <Folder Name="img">
+          <Folder Name="common">
+            <PlistImageFolder Image="btn.png" PListFile="btn.plist" Name=".btn_PList.Dir">
+              <PlistImageFile Name="btn_close.png" Key="btn_close.png" />
+              <PlistImageFile Name="btn_close_big.png" Key="btn_close_big.png" />
+              <PlistImageFile Name="button_add_chips.png" Key="button_add_chips.png" />
+              <PlistImageFile Name="button_auto_01.png" Key="button_auto_01.png" />
+              <PlistImageFile Name="button_auto_02.png" Key="button_auto_02.png" />
+              <PlistImageFile Name="button_back.png" Key="button_back.png" />
+              <PlistImageFile Name="button_baoming_off.png" Key="button_baoming_off.png" />
+              <PlistImageFile Name="button_baoming_on.png" Key="button_baoming_on.png" />
+              <PlistImageFile Name="button_bet_blue.png" Key="button_bet_blue.png" />
+              <PlistImageFile Name="button_bet_blue_press.png" Key="button_bet_blue_press.png" />
+              <PlistImageFile Name="button_cancel_off.png" Key="button_cancel_off.png" />
+              <PlistImageFile Name="button_cancel_on.png" Key="button_cancel_on.png" />
+              <PlistImageFile Name="button_close_on.png" Key="button_close_on.png" />
+              <PlistImageFile Name="button_close_press.png" Key="button_close_press.png" />
+              <PlistImageFile Name="button_dice.png" Key="button_dice.png" />
+              <PlistImageFile Name="button_golden_long.png" Key="button_golden_long.png" />
+              <PlistImageFile Name="button_list.png" Key="button_list.png" />
+              <PlistImageFile Name="button_lucknumber_off_02.png" Key="button_lucknumber_off_02.png" />
+              <PlistImageFile Name="button_lucknumber_on_02.png" Key="button_lucknumber_on_02.png" />
+              <PlistImageFile Name="button_mainmenu_rank.png" Key="button_mainmenu_rank.png" />
+              <PlistImageFile Name="button_next.png" Key="button_next.png" />
+              <PlistImageFile Name="button_next_2.png" Key="button_next_2.png" />
+              <PlistImageFile Name="button_pandora.png" Key="button_pandora.png" />
+              <PlistImageFile Name="button_pre.png" Key="button_pre.png" />
+              <PlistImageFile Name="button_pre_2.png" Key="button_pre_2.png" />
+              <PlistImageFile Name="button_question.png" Key="button_question.png" />
+              <PlistImageFile Name="button_radio_off.png" Key="button_radio_off.png" />
+              <PlistImageFile Name="button_radio_on.png" Key="button_radio_on.png" />
+              <PlistImageFile Name="button_receive_on.png" Key="button_receive_on.png" />
+              <PlistImageFile Name="button_short_blue_on.png" Key="button_short_blue_on.png" />
+              <PlistImageFile Name="button_short_golden_on.png" Key="button_short_golden_on.png" />
+              <PlistImageFile Name="button_verify_code.png" Key="button_verify_code.png" />
+              <PlistImageFile Name="button_verify_code_press.png" Key="button_verify_code_press.png" />
+              <PlistImageFile Name="host_button_gift.png" Key="host_button_gift.png" />
+              <PlistImageFile Name="host_button_list.png" Key="host_button_list.png" />
+              <PlistImageFile Name="host_button_rank.png" Key="host_button_rank.png" />
+              <PlistImageFile Name="label__0.png" Key="label__0.png" />
+              <PlistImageFile Name="label__1.png" Key="label__1.png" />
+              <PlistImageFile Name="label__2.png" Key="label__2.png" />
+              <PlistImageFile Name="label__bottom_01.png" Key="label__bottom_01.png" />
+              <PlistImageFile Name="label__bottom_02.png" Key="label__bottom_02.png" />
+              <PlistImageFile Name="label__bottom_03.png" Key="label__bottom_03.png" />
+              <PlistImageFile Name="label_player_bottom_l.png" Key="label_player_bottom_l.png" />
+              <PlistImageFile Name="label_player_bottom_r.png" Key="label_player_bottom_r.png" />
+              <PlistImageFile Name="label_player_left_1.png" Key="label_player_left_1.png" />
+              <PlistImageFile Name="label_player_right_1.png" Key="label_player_right_1.png" />
+              <PlistImageFile Name="loding_notic_btn.png" Key="loding_notic_btn.png" />
+              <PlistImageFile Name="loding_notic_btn2.png" Key="loding_notic_btn2.png" />
+              <PlistImageFile Name="loding_notic_btn3.png" Key="loding_notic_btn3.png" />
+              <PlistImageFile Name="login_btn.png" Key="login_btn.png" />
+              <PlistImageFile Name="login_btn_press.png" Key="login_btn_press.png" />
+              <PlistImageFile Name="main_button_Pandora.png" Key="main_button_Pandora.png" />
+              <PlistImageFile Name="main_button_add_01.png" Key="main_button_add_01.png" />
+              <PlistImageFile Name="main_button_black_long.png" Key="main_button_black_long.png" />
+              <PlistImageFile Name="main_button_blank_off1.png" Key="main_button_blank_off1.png" />
+              <PlistImageFile Name="main_button_blue.png" Key="main_button_blue.png" />
+              <PlistImageFile Name="main_button_blue_press.png" Key="main_button_blue_press.png" />
+              <PlistImageFile Name="main_button_golden.png" Key="main_button_golden.png" />
+              <PlistImageFile Name="main_button_golden_press.png" Key="main_button_golden_press.png" />
+              <PlistImageFile Name="main_button_green.png" Key="main_button_green.png" />
+              <PlistImageFile Name="main_button_green_press.png" Key="main_button_green_press.png" />
+              <PlistImageFile Name="main_button_radio_off.png" Key="main_button_radio_off.png" />
+              <PlistImageFile Name="main_button_radio_on.png" Key="main_button_radio_on.png" />
+              <PlistImageFile Name="main_button_red.png" Key="main_button_red.png" />
+              <PlistImageFile Name="main_button_red_press.png" Key="main_button_red_press.png" />
+              <PlistImageFile Name="raise_button.png" Key="raise_button.png" />
+              <PlistImageFile Name="rankinglist_list_bg_01.png" Key="rankinglist_list_bg_01.png" />
+              <PlistImageFile Name="rankinglist_list_bg_02.png" Key="rankinglist_list_bg_02.png" />
+              <PlistImageFile Name="snatch_supplechip_progress_butten.png" Key="snatch_supplechip_progress_butten.png" />
+              <PlistImageFile Name="tab_bar_01.png" Key="tab_bar_01.png" />
+              <PlistImageFile Name="tab_bar_bg_01.png" Key="tab_bar_bg_01.png" />
+              <PlistImageFile Name="tab_bar_bg_02.png" Key="tab_bar_bg_02.png" />
+              <PlistImageFile Name="tab_bar_bg_03.png" Key="tab_bar_bg_03.png" />
+              <PlistImageFile Name="table_host_talk.png" Key="table_host_talk.png" />
+            </PlistImageFolder>
+            <PlistImageFolder Image="headIcon.png" PListFile="headIcon.plist" Name=".headIcon_PList.Dir">
+              <PlistImageFile Name="avatar_default_01.png" Key="avatar_default_01.png" />
+              <PlistImageFile Name="avatar_default_02.png" Key="avatar_default_02.png" />
+              <PlistImageFile Name="chat_vip_icon.png" Key="chat_vip_icon.png" />
+              <PlistImageFile Name="head_frame_1.png" Key="head_frame_1.png" />
+              <PlistImageFile Name="head_frame_2.png" Key="head_frame_2.png" />
+              <PlistImageFile Name="head_frame_3.png" Key="head_frame_3.png" />
+              <PlistImageFile Name="head_frame_4.png" Key="head_frame_4.png" />
+              <PlistImageFile Name="head_frame_5.png" Key="head_frame_5.png" />
+              <PlistImageFile Name="head_frame_6.png" Key="head_frame_6.png" />
+              <PlistImageFile Name="head_frame_back.png" Key="head_frame_back.png" />
+              <PlistImageFile Name="head_frame_time.png" Key="head_frame_time.png" />
+              <PlistImageFile Name="head_host_bg.png" Key="head_host_bg.png" />
+              <PlistImageFile Name="head_host_boy.png" Key="head_host_boy.png" />
+              <PlistImageFile Name="head_host_girl.png" Key="head_host_girl.png" />
+              <PlistImageFile Name="head_host_little_bg.png" Key="head_host_little_bg.png" />
+              <PlistImageFile Name="head_host_little_boy.png" Key="head_host_little_boy.png" />
+              <PlistImageFile Name="head_host_little_girl.png" Key="head_host_little_girl.png" />
+              <PlistImageFile Name="num_vip_chat.png" Key="num_vip_chat.png" />
+            </PlistImageFolder>
+            <PlistImageFolder Image="itemIcon.png" PListFile="itemIcon.plist" Name=".itemIcon_PList.Dir">
+              <PlistImageFile Name="congrate_icon_0.png" Key="congrate_icon_0.png" />
+              <PlistImageFile Name="congrate_icon_1.png" Key="congrate_icon_1.png" />
+              <PlistImageFile Name="congrate_icon_2.png" Key="congrate_icon_2.png" />
+              <PlistImageFile Name="congrate_icon_3.png" Key="congrate_icon_3.png" />
+              <PlistImageFile Name="congrate_icon_4.png" Key="congrate_icon_4.png" />
+              <PlistImageFile Name="icon_juan.png" Key="icon_juan.png" />
+              <PlistImageFile Name="item_Diamonds_01.png" Key="item_Diamonds_01.png" />
+              <PlistImageFile Name="item_chest_01.png" Key="item_chest_01.png" />
+              <PlistImageFile Name="item_chest_02.png" Key="item_chest_02.png" />
+              <PlistImageFile Name="item_chest_03.png" Key="item_chest_03.png" />
+              <PlistImageFile Name="item_chest_04.png" Key="item_chest_04.png" />
+              <PlistImageFile Name="item_chips_01.png" Key="item_chips_01.png" />
+              <PlistImageFile Name="item_frame_out.png" Key="item_frame_out.png" />
+              <PlistImageFile Name="item_gift_01.png" Key="item_gift_01.png" />
+              <PlistImageFile Name="item_gift_02.png" Key="item_gift_02.png" />
+              <PlistImageFile Name="item_gift_03.png" Key="item_gift_03.png" />
+              <PlistImageFile Name="item_gift_04.png" Key="item_gift_04.png" />
+              <PlistImageFile Name="item_gift_05.png" Key="item_gift_05.png" />
+              <PlistImageFile Name="item_gift_beginner.png" Key="item_gift_beginner.png" />
+              <PlistImageFile Name="item_gift_mall_02.png" Key="item_gift_mall_02.png" />
+              <PlistImageFile Name="item_point_01.png" Key="item_point_01.png" />
+              <PlistImageFile Name="item_ticket_01.png" Key="item_ticket_01.png" />
+              <PlistImageFile Name="item_vip_card.png" Key="item_vip_card.png" />
+              <PlistImageFile Name="item_wine_01.png" Key="item_wine_01.png" />
+              <PlistImageFile Name="item_wine_02.png" Key="item_wine_02.png" />
+              <PlistImageFile Name="item_wine_03.png" Key="item_wine_03.png" />
+              <PlistImageFile Name="item_wine_04.png" Key="item_wine_04.png" />
+              <PlistImageFile Name="item_wine_05.png" Key="item_wine_05.png" />
+              <PlistImageFile Name="item_wine_06.png" Key="item_wine_06.png" />
+              <PlistImageFile Name="mail_icon_1.png" Key="mail_icon_1.png" />
+              <PlistImageFile Name="mail_icon_2.png" Key="mail_icon_2.png" />
+              <PlistImageFile Name="mail_icon_3.png" Key="mail_icon_3.png" />
+              <PlistImageFile Name="mail_icon_4.png" Key="mail_icon_4.png" />
+              <PlistImageFile Name="preview_litttle_icon_1.png" Key="preview_litttle_icon_1.png" />
+              <PlistImageFile Name="preview_litttle_icon_2.png" Key="preview_litttle_icon_2.png" />
+              <PlistImageFile Name="preview_litttle_icon_3.png" Key="preview_litttle_icon_3.png" />
+              <PlistImageFile Name="prix_countdown_box.png" Key="prix_countdown_box.png" />
+              <PlistImageFile Name="rank_subsidy_icon.png" Key="rank_subsidy_icon.png" />
+              <PlistImageFile Name="sign_diamond_1.png" Key="sign_diamond_1.png" />
+              <PlistImageFile Name="sign_diamond_2.png" Key="sign_diamond_2.png" />
+              <PlistImageFile Name="sign_diamond_3.png" Key="sign_diamond_3.png" />
+              <PlistImageFile Name="sign_diamond_4.png" Key="sign_diamond_4.png" />
+              <PlistImageFile Name="sign_diamond_5.png" Key="sign_diamond_5.png" />
+              <PlistImageFile Name="sign_diamond_6.png" Key="sign_diamond_6.png" />
+              <PlistImageFile Name="sign_diamond_7.png" Key="sign_diamond_7.png" />
+              <PlistImageFile Name="sign_diamond_8.png" Key="sign_diamond_8.png" />
+              <PlistImageFile Name="sign_diamond_9.png" Key="sign_diamond_9.png" />
+              <PlistImageFile Name="snatch_chip_icon.png" Key="snatch_chip_icon.png" />
+            </PlistImageFolder>
+            <PlistImageFolder Image="ui.png" PListFile="ui.plist" Name=".ui_PList.Dir">
+              <PlistImageFile Name="9Gong_backpack_item_bg.png" Key="9Gong_backpack_item_bg.png" />
+              <PlistImageFile Name="9Gong_bet_long_bg.png" Key="9Gong_bet_long_bg.png" />
+              <PlistImageFile Name="9Gong_list_bg.png" Key="9Gong_list_bg.png" />
+              <PlistImageFile Name="blank_bg.png" Key="blank_bg.png" />
+              <PlistImageFile Name="chat_icon_host.png" Key="chat_icon_host.png" />
+              <PlistImageFile Name="chat_vip_icon.png" Key="chat_vip_icon.png" />
+              <PlistImageFile Name="chip_main.png" Key="chip_main.png" />
+              <PlistImageFile Name="coming_soon.png" Key="coming_soon.png" />
+              <PlistImageFile Name="congrate_icon.png" Key="congrate_icon.png" />
+              <PlistImageFile Name="corner_green_01.png" Key="corner_green_01.png" />
+              <PlistImageFile Name="dealer_icon.png" Key="dealer_icon.png" />
+              <PlistImageFile Name="diamond_icon.png" Key="diamond_icon.png" />
+              <PlistImageFile Name="dot_gray.png" Key="dot_gray.png" />
+              <PlistImageFile Name="dot_yellow.png" Key="dot_yellow.png" />
+              <PlistImageFile Name="host_button_gift_new.png" Key="host_button_gift_new.png" />
+              <PlistImageFile Name="icon_broadcast.png" Key="icon_broadcast.png" />
+              <PlistImageFile Name="icon_diban_jinbiaosai.png" Key="icon_diban_jinbiaosai.png" />
+              <PlistImageFile Name="icon_greater_than.png" Key="icon_greater_than.png" />
+              <PlistImageFile Name="icon_hengtiao.png" Key="icon_hengtiao.png" />
+              <PlistImageFile Name="icon_label.png" Key="icon_label.png" />
+              <PlistImageFile Name="icon_new.png" Key="icon_new.png" />
+              <PlistImageFile Name="icon_player_01.png" Key="icon_player_01.png" />
+              <PlistImageFile Name="icon_titan_sports_96.png" Key="icon_titan_sports_96.png" />
+              <PlistImageFile Name="line_bg_long.png" Key="line_bg_long.png" />
+              <PlistImageFile Name="little_tips_bg.png" Key="little_tips_bg.png" />
+              <PlistImageFile Name="loading_chip_01.png" Key="loading_chip_01.png" />
+              <PlistImageFile Name="loading_chip_02.png" Key="loading_chip_02.png" />
+              <PlistImageFile Name="login_image_line.png" Key="login_image_line.png" />
+              <PlistImageFile Name="logo_beyond.png" Key="logo_beyond.png" />
+              <PlistImageFile Name="logo_titan.png" Key="logo_titan.png" />
+              <PlistImageFile Name="logo_titan_metal.png" Key="logo_titan_metal.png" />
+              <PlistImageFile Name="mall_label.png" Key="mall_label.png" />
+              <PlistImageFile Name="notice_dot.png" Key="notice_dot.png" />
+              <PlistImageFile Name="notice_new_bg.png" Key="notice_new_bg.png" />
+              <PlistImageFile Name="prix_info_bg.png" Key="prix_info_bg.png" />
+              <PlistImageFile Name="rank_money_big.png" Key="rank_money_big.png" />
+              <PlistImageFile Name="rank_money_little.png" Key="rank_money_little.png" />
+              <PlistImageFile Name="sex_icon_01.png" Key="sex_icon_01.png" />
+              <PlistImageFile Name="sex_icon_02.png" Key="sex_icon_02.png" />
+              <PlistImageFile Name="snatch_corner.png" Key="snatch_corner.png" />
+              <PlistImageFile Name="snatch_corner_shadow.png" Key="snatch_corner_shadow.png" />
+              <PlistImageFile Name="snatch_treasure_text_bg.png" Key="snatch_treasure_text_bg.png" />
+              <PlistImageFile Name="splash_titan_logo_for_censorship.png" Key="splash_titan_logo_for_censorship.png" />
+              <PlistImageFile Name="tab_bar_01.png" Key="tab_bar_01.png" />
+              <PlistImageFile Name="tab_bar_bg_01.png" Key="tab_bar_bg_01.png" />
+              <PlistImageFile Name="tab_bar_bg_02.png" Key="tab_bar_bg_02.png" />
+              <PlistImageFile Name="tab_bar_bg_03.png" Key="tab_bar_bg_03.png" />
+              <PlistImageFile Name="table_Call_bg.png" Key="table_Call_bg.png" />
+              <PlistImageFile Name="table_Call_bg1.png" Key="table_Call_bg1.png" />
+              <PlistImageFile Name="table_chip_bg_01.png" Key="table_chip_bg_01.png" />
+              <PlistImageFile Name="table_chip_gold_01.png" Key="table_chip_gold_01.png" />
+              <PlistImageFile Name="table_chip_green_01.png" Key="table_chip_green_01.png" />
+              <PlistImageFile Name="table_chip_red_01.png" Key="table_chip_red_01.png" />
+              <PlistImageFile Name="table_chips_100.png" Key="table_chips_100.png" />
+              <PlistImageFile Name="table_chips_1000.png" Key="table_chips_1000.png" />
+              <PlistImageFile Name="table_chips_10000.png" Key="table_chips_10000.png" />
+              <PlistImageFile Name="table_chips_100000.png" Key="table_chips_100000.png" />
+              <PlistImageFile Name="table_chips_25.png" Key="table_chips_25.png" />
+              <PlistImageFile Name="table_chips_25000.png" Key="table_chips_25000.png" />
+              <PlistImageFile Name="table_chips_500.png" Key="table_chips_500.png" />
+              <PlistImageFile Name="table_chips_5000.png" Key="table_chips_5000.png" />
+              <PlistImageFile Name="table_left_bg.png" Key="table_left_bg.png" />
+              <PlistImageFile Name="text_point.png" Key="text_point.png" />
+              <PlistImageFile Name="titan_logo_for_censorship.png" Key="titan_logo_for_censorship.png" />
+              <PlistImageFile Name="top_line_bg_01.png" Key="top_line_bg_01.png" />
+              <PlistImageFile Name="top_line_bg_self.png" Key="top_line_bg_self.png" />
+              <PlistImageFile Name="vip_flag_01.png" Key="vip_flag_01.png" />
+              <PlistImageFile Name="vip_flag_01_for_censorship.png" Key="vip_flag_01_for_censorship.png" />
+              <PlistImageFile Name="vip_flag_02.png" Key="vip_flag_02.png" />
+              <PlistImageFile Name="vip_flag_02_for_censorship.png" Key="vip_flag_02_for_censorship.png" />
+              <PlistImageFile Name="vip_flag_03.png" Key="vip_flag_03.png" />
+              <PlistImageFile Name="vip_flag_03_for_censorship.png" Key="vip_flag_03_for_censorship.png" />
+              <PlistImageFile Name="vip_flag_04.png" Key="vip_flag_04.png" />
+              <PlistImageFile Name="vip_flag_04_for_censorship.png" Key="vip_flag_04_for_censorship.png" />
+              <PlistImageFile Name="vip_time_icon.png" Key="vip_time_icon.png" />
+            </PlistImageFolder>
+            <Image Name="btn.png" />
+            <Image Name="headIcon.png" />
+            <Image Name="itemIcon.png" />
+            <Image Name="ui.png" />
+            <Folder Name="bg">
+              <Image Name="loading_page_for_censorship.jpg" />
+              <Image Name="login_bg_bog.jpg" />
+              <Image Name="main_blue_bg.jpg" />
+              <Image Name="table_bg_blue.jpg" />
+              <Image Name="card_style.png" />
+              <Image Name="chat_vip_bg.png" />
+              <Image Name="congrate_flow_1.png" />
+              <Image Name="help_bg_01.png" />
+              <Image Name="host_current_choose_bg.png" />
+              <Image Name="host_watch_waiting_bg.png" />
+              <Image Name="item_info_bg.png" />
+              <Image Name="little_tips_bg_02.png" />
+              <Image Name="loading_throbber.png" />
+              <Image Name="loading_throbber_b.png" />
+              <Image Name="login_bg.png" />
+              <Image Name="mall_bg_big.png" />
+              <Image Name="poker_mode_bg.png" />
+              <Image Name="prix_countdown_bg.png" />
+              <Image Name="rankinglist_icon_01.png" />
+              <Image Name="snatch_icon.png" />
+              <Image Name="splash_bg.png" />
+              <Image Name="table_green.png" />
+              <Image Name="table_host_multiple.png" />
+              <Image Name="table_left_butten_bg.png" />
+              <Image Name="table_tips_bg.png" />
+              <Image Name="winer_halo_01.png" />
+              <Image Name="win_bg_round.png" />
+              <Image Name="win_shine_bg.png" />
+              <Image Name="login_bg_bg.jpg" />
+            </Folder>
+            <PlistImageFolder Image="bar.png" PListFile="bar.plist" Name=".bar_PList.Dir">
+              <PlistImageFile Name="main_tube_vip_01.png" Key="main_tube_vip_01.png" />
+              <PlistImageFile Name="main_tube_vip_02.png" Key="main_tube_vip_02.png" />
+              <PlistImageFile Name="personal_my_progress.png" Key="personal_my_progress.png" />
+              <PlistImageFile Name="personal_vip_progress_bg.png" Key="personal_vip_progress_bg.png" />
+              <PlistImageFile Name="raise_long_bg_tube.png" Key="raise_long_bg_tube.png" />
+              <PlistImageFile Name="raise_long_bg_tube_a.png" Key="raise_long_bg_tube_a.png" />
+              <PlistImageFile Name="snatch_supplechip_progress_01.png" Key="snatch_supplechip_progress_01.png" />
+              <PlistImageFile Name="snatch_supplechip_progress_02.png" Key="snatch_supplechip_progress_02.png" />
+              <PlistImageFile Name="tab_bar_01.png" Key="tab_bar_01.png" />
+              <PlistImageFile Name="tab_bar_bg.png" Key="tab_bar_bg.png" />
+              <PlistImageFile Name="update_loading_bg.png" Key="update_loading_bg.png" />
+              <PlistImageFile Name="update_loading_tube.png" Key="update_loading_tube.png" />
+              <PlistImageFile Name="vip_time_tube_bg.png" Key="vip_time_tube_bg.png" />
+              <PlistImageFile Name="vip_time_tube_golden.png" Key="vip_time_tube_golden.png" />
+              <PlistImageFile Name="vip_time_tube_red.png" Key="vip_time_tube_red.png" />
+            </PlistImageFolder>
+            <Image Name="bar.png" />
+          </Folder>
+          <Folder Name="login">
+            <PlistImageFolder Image="login.png" PListFile="login.plist" Name=".login_PList.Dir">
+              <PlistImageFile Name="CheckBox_01.png" Key="CheckBox_01.png" />
+              <PlistImageFile Name="CheckBox_02.png" Key="CheckBox_02.png" />
+              <PlistImageFile Name="Login.png" Key="Login.png" />
+              <PlistImageFile Name="_supplechip_monney.png" Key="_supplechip_monney.png" />
+              <PlistImageFile Name="bg_login_01.png" Key="bg_login_01.png" />
+              <PlistImageFile Name="button_add_chips_1.png" Key="button_add_chips_1.png" />
+              <PlistImageFile Name="button_logouts.png" Key="button_logouts.png" />
+              <PlistImageFile Name="button_start.png" Key="button_start.png" />
+              <PlistImageFile Name="button_verify_code_text.png" Key="button_verify_code_text.png" />
+              <PlistImageFile Name="enter_button_switch.png" Key="enter_button_switch.png" />
+              <PlistImageFile Name="icon_qq.png" Key="icon_qq.png" />
+              <PlistImageFile Name="icon_taobao.png" Key="icon_taobao.png" />
+              <PlistImageFile Name="icon_weibo.png" Key="icon_weibo.png" />
+              <PlistImageFile Name="icon_weixin.png" Key="icon_weixin.png" />
+              <PlistImageFile Name="loding_notic_logo.png" Key="loding_notic_logo.png" />
+              <PlistImageFile Name="login_get_btn.png" Key="login_get_btn.png" />
+              <PlistImageFile Name="login_icon_alipay.png" Key="login_icon_alipay.png" />
+              <PlistImageFile Name="login_icon_qq.png" Key="login_icon_qq.png" />
+              <PlistImageFile Name="login_icon_weixin.png" Key="login_icon_weixin.png" />
+              <PlistImageFile Name="login_image_line.png" Key="login_image_line.png" />
+              <PlistImageFile Name="login_input.png" Key="login_input.png" />
+              <PlistImageFile Name="login_kunag.png" Key="login_kunag.png" />
+              <PlistImageFile Name="login_line.png" Key="login_line.png" />
+              <PlistImageFile Name="login_logo.png" Key="login_logo.png" />
+              <PlistImageFile Name="login_notice.png" Key="login_notice.png" />
+              <PlistImageFile Name="login_qq_btn.png" Key="login_qq_btn.png" />
+              <PlistImageFile Name="login_wechat_btn.png" Key="login_wechat_btn.png" />
+              <PlistImageFile Name="logo_ali.png" Key="logo_ali.png" />
+              <PlistImageFile Name="notic_agreement_logo.png" Key="notic_agreement_logo.png" />
+              <PlistImageFile Name="sex_boy_choose.png" Key="sex_boy_choose.png" />
+              <PlistImageFile Name="sex_boy_nochoose.png" Key="sex_boy_nochoose.png" />
+              <PlistImageFile Name="sex_gilr_choose.png" Key="sex_gilr_choose.png" />
+              <PlistImageFile Name="sex_gilr_nochoose.png" Key="sex_gilr_nochoose.png" />
+              <PlistImageFile Name="sex_logo.png" Key="sex_logo.png" />
+              <PlistImageFile Name="spersonal_button_sex_select.png" Key="spersonal_button_sex_select.png" />
+              <PlistImageFile Name="title_login.png" Key="title_login.png" />
+              <PlistImageFile Name="title_role_info.png" Key="title_role_info.png" />
+              <PlistImageFile Name="tube_add_chip_bg.png" Key="tube_add_chip_bg.png" />
+              <PlistImageFile Name="tube_add_chip_green.png" Key="tube_add_chip_green.png" />
+            </PlistImageFolder>
+            <Image Name="login.png" />
+          </Folder>
+        </Folder>
+      </RootFolder>
+    </Group>
+  </SolutionFolder>
+</Solution>
