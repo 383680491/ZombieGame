@@ -65,7 +65,7 @@ function GameLayer:init()
     self.mainLayer:addChild(self.mainMap, 5000, 5000);
 
     local spriteFrameCache = cc.SpriteFrameCache:getInstance()
-    spriteFrameCache:addSpriteFrames('role/5110511.plist', 'role/5110511.png') 
+    spriteFrameCache:addSpriteFrames('role/role_5110511.plist', 'role/role_5110511.png') 
     spriteFrameCache:addSpriteFrames('monster/20005.plist', 'monster/20005.png')
 
     local SpriteRole = require 'ui.widget.SpriteRole'
@@ -74,7 +74,7 @@ function GameLayer:init()
     self.role:setGameLayer(self)
     self.mainMap:addChild(self.role)
 
-    for i= 1, 500 do 
+    for i= 1, 200 do 
         local x = math.random(200, 800)
         local y = math.random(200, 800)
         local SpriteMonster = require 'ui.widget.SpriteMonster'
@@ -86,11 +86,8 @@ function GameLayer:init()
         monster:findPath(self.mainMap:space2Tile(cc.p(1200, 430)))
     end
 
-
-
     self.mapSize = cc.size(self.mainMap:getMapSize().width * self.mainMap:getTileSize().width,
         self.mainMap:getMapSize().height * self.mainMap:getTileSize().height);
-look(self.mapSize, 'self.mapSize')
     self:scheduleUpdate();
     --self:updateBattleFog();
 end
@@ -156,27 +153,14 @@ end
 
 
 
-function GameLayer:updateControl(dt)
-if not self.hero:isHeroDied() then
-    if self.controlStatus == HERO_STATUS_RIGHT_WALKING then
-        self.moveOffset = self.hero:getSpeedX();
-    elseif self.controlStatus == HERO_STATUS_LEFT_WALKING then
-        self.moveOffset = -self.hero:getSpeedX();
-    elseif self.controlStatus == HERO_STATUS_RIGHT_STAND then
-        self.moveOffset = 0;
-    elseif self.controlStatus == HERO_STATUS_LEFT_STAND then
-        self.moveOffset = 0;
-    elseif self.controlStatus == HERO_STATUS_JUMP then
-        self.moveOffset = 0;
-    elseif self.controlStatus == HERO_STATUS_RIGHT_JUMP then
-    elseif self.controlStatus == HERO_STATUS_LEFT_JUMP then
-    elseif self.controlStatus == HERO_STATUS_BOM then
-        self.moveOffset = 0;
-    elseif self.controlStatus == HERO_STATUS_LEFT_BOM then
-    elseif self.controlStatus == HERO_STATUS_RIGHT_BOM then
-    end
-end
-end
+
+
+
+
+
+
+
+
 
 
 
