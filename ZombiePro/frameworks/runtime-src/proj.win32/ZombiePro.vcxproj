@@ -210,6 +210,7 @@ xcopy "$(ProjectDir)..\..\..\src" "$(LocalDebuggerWorkingDirectory)\src" /D /E /
     <ClInclude Include="..\Classes\mapview\MapTileNode.h" />
     <ClInclude Include="..\Classes\mapview\MapView.h" />
     <ClInclude Include="..\Classes\mapview\MapViewBase.h" />
+    <ClInclude Include="..\Classes\mapview\NodeAStar.h" />
     <ClInclude Include="..\Classes\mapview\SortNode.h" />
     <ClInclude Include="..\Classes\mapview\TileDef.h" />
     <ClInclude Include="..\Classes\MirControl\MirBatchDrawLabel.h" />
@@ -262,6 +263,7 @@ xcopy "$(ProjectDir)..\..\..\src" "$(LocalDebuggerWorkingDirectory)\src" /D /E /
     <ClCompile Include="..\Classes\mapview\MapTileNode.cpp" />
     <ClCompile Include="..\Classes\mapview\MapView.cpp" />
     <ClCompile Include="..\Classes\mapview\MapViewBase.cpp" />
+    <ClCompile Include="..\Classes\mapview\NodeAStar.cpp" />
     <ClCompile Include="..\Classes\mapview\SortNode.cpp" />
     <ClCompile Include="..\Classes\MirControl\MirBatchDrawLabel.cpp" />
     <ClCompile Include="..\Classes\MirControl\MirTextNode.cpp" />

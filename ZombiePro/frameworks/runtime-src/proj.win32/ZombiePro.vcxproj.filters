@@ -197,6 +197,9 @@
     <ClInclude Include="..\Classes\utils\cJSON\cJSON.h">
       <Filter>Classes\utils\cJSON</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\mapview\NodeAStar.h">
+      <Filter>Classes\mapview</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
@@ -307,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\utils\cJSON\cJSON.c">
       <Filter>Classes\utils\cJSON</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\mapview\NodeAStar.cpp">
+      <Filter>Classes\mapview</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
