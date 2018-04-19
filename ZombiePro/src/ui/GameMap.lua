@@ -36,7 +36,26 @@ end
 
 
 
+--判断该直线上是否有墙
+function GameMap:pathHasBlock(beginPos, endPos)
+    local vector = G_Utils.getDirVector(beginPos, endPos)
+    local beginTile = self:space2Tile(beginPos)
+    local endTile = self:space2Tile(endPos)
+    local tileWidth = self:getTileSize().width
 
+    local temp = beginPos
+    local tempTile = beginTile
+
+    while not cc.pEqu(tempTile, endTile) do 
+        temp = cc.pAdd(temp, cc.pMul(vector, tileWidth))
+        tempTile = self:space2Tile(temp)
+        if self:isBlock(tempTile) then 
+            return true
+        end
+    end
+
+    return false
+end
 
 
 

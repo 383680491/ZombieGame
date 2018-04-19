@@ -12,6 +12,11 @@ function SpriteBase:ctor()
     self.speedFactor = 5
     self.speed = 0
     self.sourcePath = 'role_%d_%s_%05d.png'
+    self.hurtRadius = 50   --受伤范围
+    self.attackRadius = 100  --攻击范围
+    self.warningRadiis = -1  --警戒范围   （-1是全屏 这个参数应该只有怪物会用到，在警戒范围内，会寻找目标攻击）
+
+    self.hp = 5
 end
 
 function SpriteBase:runAnimal()   
@@ -89,6 +94,30 @@ function SpriteBase:getDirByJoyDir(angle, direct)
     elseif direct.x >= 0.05 and direct.y <= -0.05 then 
         self.dir = G_Def.DIR_RIGHT_DOWN
     end
+end
+
+function SpriteBase:getHurtRadius()
+    return self.hurtRadius
+end
+
+function SpriteBase:getAttackRadius()
+    return self.attackRadius
+end
+
+function SpriteBase:getWarningRadiis()
+    return self.warningRadiis
+end
+
+function SpriteBase:isDead()
+    return self.hp <= 0
+end
+
+function SpriteBase:drawRect()
+    local drawNode = cc.DrawNode:create()
+    self:addChild(drawNode, 100)
+    local x, y = self:getPosition()
+    drawNode:drawCircle(cc.p(x, y), self.hurtRadius, 0, 50, false, cc.c4f(0,0,1,1))  
+    drawNode:drawCircle(cc.p(x, y), self.attackRadius, 0, 50, false, cc.c4f(1,0,0,1))    
 end
 
 return SpriteBase

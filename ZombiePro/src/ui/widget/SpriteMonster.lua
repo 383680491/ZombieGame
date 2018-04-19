@@ -53,7 +53,7 @@ function SpriteMonster:update(dt)
         local curDestPos = self.gameLayer.mainMap:tile2Space(self.curDestTile)
         local x, y = self:getPosition()
         local curPos = cc.p(x, y)
-        self.dirAtor = self:getDir(curPos, curDestPos)
+        self.dirAtor = G_Utils.getDirVector(curPos, curDestPos)
         self.status = 'run'
     elseif self.status == 'run' then
         local posX, posY = self:getPosition()
@@ -76,10 +76,6 @@ function SpriteMonster:update(dt)
             self.canInitPath = true
         end
     end
-end
-
-function SpriteMonster:getDir(curPos, curDestPos)
-    return cc.pNormalize(cc.pSub(curDestPos, curPos))
 end
 
 return SpriteMonster

@@ -32,6 +32,24 @@ function cc.pAdd(pt1,pt2)
     return {x = pt1.x + pt2.x , y = pt1.y + pt2.y }
 end
 
+function cc.pEqu(pt1,pt2)
+    if pt1.x ~= pt2.x then 
+        return false
+    end
+
+    if pt1.y ~= pt2.y then 
+        return false
+    end
+    
+    return true
+end
+
+
+
+function cc.pAdd(pt1,pt2)
+    return {x = pt1.x + pt2.x , y = pt1.y + pt2.y }
+end
+
 function cc.pSub(pt1,pt2)
     return {x = pt1.x - pt2.x , y = pt1.y - pt2.y }
 end

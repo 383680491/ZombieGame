@@ -2,22 +2,13 @@ local BaseView = class("BaseView", cc.Layer)
 local device = require 'cocos.framework.device'
 
 function BaseView:ctor()
-    self.swallowTouches = swallowTouches
+    self.swallowTouches = true
     self.blackLayer = nil
     self.registIdList_bv = {};
     self.releaseNodeList_bv = {};
     self.emitEventList = {}
     
-    --设置onEnter  OnExit
-    -- local function registerHander(event)
-    --     if "enter" == event then
-    --         self:onEnter()
-    --     elseif "exit" == event then
-    --         self:onExit()
-    --     end
-    -- end
 
-    -- self:registerScriptHandler(registerHander)
 
     -- if device.platform ~= "ios" then 
     --     --设置返回键
@@ -32,33 +23,64 @@ function BaseView:ctor()
     --     local eventDispatcher = self:getEventDispatcher()
     --     eventDispatcher:addEventListenerWithSceneGraphPriority(keyListener, self)
     -- end
+end
 
-    
-    -- local function onTouchBegan(touch, event)
-    --     return self:onTouchBegan(touch, event)
-    -- end
+function BaseView:registerHander()  
+    --设置onEnter  OnExit
+    local function registerHander(event)
+        if "enter" == event then
+            self:onEnter()
+        elseif "exit" == event then
+            self:onExit()
+        end
+    end
 
-    -- local function onTouchMoved(touch, event)
-    --     self:onTouchMoved(touch, event)
-    -- end
+    self:registerScriptHandler(registerHander)
+end
 
-    -- local function onTouchEnded(touch, event)
-    --     self:onTouchEnded(touch, event)
-    -- end
+function BaseView:registerTouch()
+   local function onTouchBegan(touch, event)
+        return self:onTouchBegan(touch, event)
+    end
 
-    -- local function onTouchCancelled(touch, event)
-    --     self:onTouchCancelled(touch, event)
-    -- end
-    -- local listener = cc.EventListenerTouchOneByOne:create()
-    -- listener:setSwallowTouches(self.swallowTouches)
+    local function onTouchMoved(touch, event)
+        self:onTouchMoved(touch, event)
+    end
 
-    -- listener:registerScriptHandler(onTouchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
-    -- listener:registerScriptHandler(onTouchMoved, cc.Handler.EVENT_TOUCH_MOVED)
-    -- listener:registerScriptHandler(onTouchEnded, cc.Handler.EVENT_TOUCH_ENDED)
-    -- listener:registerScriptHandler(onTouchCancelled, cc.Handler.EVENT_TOUCH_CANCELLED)
+    local function onTouchEnded(touch, event)
+        self:onTouchEnded(touch, event)
+    end
 
-    -- local eventDispatcher = self:getEventDispatcher()
-    -- eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
+    local function onTouchCancelled(touch, event)
+        self:onTouchCancelled(touch, event)
+    end
+    local listener = cc.EventListenerTouchOneByOne:create()
+    listener:setSwallowTouches(self.swallowTouches)
+
+    listener:registerScriptHandler(onTouchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
+    listener:registerScriptHandler(onTouchMoved, cc.Handler.EVENT_TOUCH_MOVED)
+    listener:registerScriptHandler(onTouchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+    listener:registerScriptHandler(onTouchCancelled, cc.Handler.EVENT_TOUCH_CANCELLED)
+
+    local eventDispatcher = self:getEventDispatcher()
+    eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
+end
+
+function BaseView:registerKey()
+    if device.platform == "windows" then
+        local onKeyPressed = function(keyCode, event)
+            return self:onKeyPressed(keyCode, event)
+        end
+
+        local onKeyReleased = function(keyCode, event)
+            self:onKeyReleased(keyCode, event)
+        end
+
+        listener = cc.EventListenerKeyboard:create()
+        listener:registerScriptHandler(onKeyPressed, cc.Handler.EVENT_KEYBOARD_PRESSED)
+        listener:registerScriptHandler(onKeyReleased, cc.Handler.EVENT_KEYBOARD_RELEASED)
+        eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
+    end
 end
 
 --增加遮罩

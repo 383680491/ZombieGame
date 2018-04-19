@@ -11,6 +11,8 @@ CC_SHOW_FPS = true
 -- disable create unexpected global variable
 CC_DISABLE_GLOBAL = false
 
+DEBUG_MOD = true
+
 -- for module display
 CC_DESIGN_RESOLUTION = {
     width = 960,

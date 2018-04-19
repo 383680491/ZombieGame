@@ -15,7 +15,6 @@ function GameLayer:create(path)
     local ret = GameLayer.new(path)
     ret:init()
     ret:initJoy()
-    ret:registTouch()
 
     return ret
 end
@@ -30,15 +29,9 @@ function GameLayer:ctor()
 end
 
 function GameLayer:init()
-    self.moveStep = 2;                       --每帧要移动的距离
-    self.moveDelta = 0.05;                   --为了模拟出加速度效果，移动增量
-
-    self.moveOffset = 0;                     --水平移动偏移量
-    self.jumpOffset = 0;                     --垂直跳跃的偏移量
-    self.heroLastTilePos = cc.p(0, 0);
-
-    self.controlStatus = HERO_STATUS_RIGHT_STAND;
     self.bombList = {};
+    self.roleList = {};
+    self.monsterList = {}
 
     self.heroAnchor = cc.p(self.winSize.width / 2 - 80, self.winSize.height / 2)    --主角走到屏幕的该点后地图就开始跟随
 
@@ -69,27 +62,30 @@ function GameLayer:init()
     spriteFrameCache:addSpriteFrames('monster/20005.plist', 'monster/20005.png')
 
     local SpriteRole = require 'ui.widget.SpriteRole'
-    self.role = SpriteRole:new(5110511)
-    self.role:setPosition(cc.p(1200, 430))
-    self.role:setGameLayer(self)
-    self.mainMap:addChild(self.role)
+    self.mainRole = SpriteRole:new(5110511)
+    self.mainRole:setPosition(cc.p(1200, 430))
+    self.mainRole:setGameLayer(self)
+    self.mainMap:addChild(self.mainRole)
+    table.insert(self.roleList, self.mainRole)
 
-    for i= 1, 200 do 
-        local x = math.random(200, 800)
-        local y = math.random(200, 800)
-        local SpriteMonster = require 'ui.widget.SpriteMonster'
-        local monster = SpriteMonster:new(20005)
-        monster:setPosition(cc.p(x, y))
-        monster:setGameLayer(self)
-        self.mainMap:addChild(monster)
-        monster:createPath()
-        monster:findPath(self.mainMap:space2Tile(cc.p(1200, 430)))
-    end
+    -- for i= 1, 200 do 
+    --     local x = math.random(200, 800)
+    --     local y = math.random(200, 800)
+    --     local SpriteMonster = require 'ui.widget.SpriteMonster'
+    --     local monster = SpriteMonster:new(20005)
+    --     monster:setPosition(cc.p(x, y))
+    --     monster:setGameLayer(self)
+    --     self.mainMap:addChild(monster)
+    --     table.insert(self.monsterList, monster)
+    --     monster:createPath()
+    --     monster:findPath(self.mainMap:space2Tile(cc.p(1200, 430)))
+    -- end
 
     self.mapSize = cc.size(self.mainMap:getMapSize().width * self.mainMap:getTileSize().width,
         self.mainMap:getMapSize().height * self.mainMap:getTileSize().height);
     self:scheduleUpdate();
     --self:updateBattleFog();
+    self:registerTouch()
 end
 
 function GameLayer:initJoy()
@@ -107,7 +103,7 @@ function GameLayer:onJoyStickUpdate(joyStick, angle, direct, power)
     look(direct, 'direct')
     look(power, 'power')
 
-    self.role:move(angle, direct, power)
+    self.mainRole:move(angle, direct, power)
 end
 
 function GameLayer:scheduleUpdate()
@@ -136,7 +132,7 @@ function GameLayer:update(dt)
 end
 
 function GameLayer:setMapScrollPosition(dt)
-    local heroPosX, heroPosY = self.role:getPositionX(), self.role:getPositionY();
+    local heroPosX, heroPosY = self.mainRole:getPositionX(), self.mainRole:getPositionY();
     local x = math.max(heroPosX, self.heroAnchor.x);
     local y = math.max(heroPosY, self.heroAnchor.y);
 
@@ -150,124 +146,79 @@ function GameLayer:setMapScrollPosition(dt)
 end
 
 
+function GameLayer:onTouchBegan(touch, event)
+    local touchPoint = touch:getLocation()
+    local pos = self.mainMap:convertToNodeSpace(touchPoint)
+   -- look(pos, 'onTouchBegan pos')
 
+    local heroPosX, heroPosY = self.mainRole:getPositionX(), self.mainRole:getPositionY();
+    if self.mainMap:pathHasBlock(cc.p(heroPosY, heroPosY), pos) then 
+        look('block！！！！！！！！！！！！！！！！！！！！！！！！！')
+    else
+        look('NONOONOONONONONO~~~~~~~~~~~block')
+    end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return true
+end
 
 function GameLayer:dealCollision(dt)
-    local isHeroSuper = self.hero:isSuper();
-    local heroRect = self.hero:getCollisionRect();
-    local monsterList = self.mainMap:getMonsterList()
-    local enemyBulletList = self.mainMap:getEnemyBulletList()
-
-    for _, bomb in ipairs(self.bombList) do
-        if bomb and BULLET_STATUS_ACTIVE == bomb:getStatus() then
-            local bombRect = bomb:getHarmCollisionRect();
-
-            for _, monster in ipairs(monsterList) do
-                local monsterRect = monster:getCollisionRect();
-                if (MONSTER_STATUS_ACTIVE == monster:getStatus() or MONSTER_STATUS_NO_ACTIVE == monster:getStatus()) and
-                        BULLET_STATUS_ACTIVE == bomb:getStatus() and
-                        math.abs(bombRect.x - monsterRect.x) < 600 and
-                        math.abs(bombRect.y - monsterRect.y) < 600 and
-                        cc.rectIntersectsRect(monsterRect, bombRect) then
-                    monster:setHarm(bomb:getAttackValue());
-                end
-            end
-
-            if not isHeroSuper and BULLET_STATUS_ACTIVE == bomb:getStatus() and
-                    math.abs(bombRect.x - heroRect.x) < 600 and
-                    math.abs(bombRect.y - heroRect.y) < 600 and
-                    cc.rectIntersectsRect(bombRect, heroRect) then
-                --self.hero:setHeroLifeStatus(HERO_LIFE_DIE);
-            end
-
-            bomb:setStatus(BULLET_STATUS_CLEAR);
-        end
-    end
-
-    for _, monster in ipairs(monsterList) do
-        if monster then
-            local monsterRect = monster:getCollisionRect();
-            if not isHeroSuper and (MONSTER_STATUS_ACTIVE == monster:getStatus() or MONSTER_STATUS_ANGRY == monster:getStatus()) and
-                    math.abs(monsterRect.x - heroRect.x) < 600 and
-                    math.abs(monsterRect.y - heroRect.y) < 600 and
-                    cc.rectIntersectsRect(monsterRect, heroRect) then
-                --self.hero:setHeroLifeStatus(HERO_LIFE_DIE);
-            end
-        end
-    end
-
-    local bombCount = #self.bombList
-    for bombIndex = 1, bombCount do
-        local bomb = self.bombList[bombIndex]
-        if bomb and BULLET_STATUS_CLEAR == bomb:getStatus() then
-            table.remove(self.bombList, bombIndex)
-
-            if bomb == self.hero:getCurBomb() then
-                self.hero.curBomb = nil;
-            end
-
-            bomb:removeFromParent();
-        end
-    end
-
-    local monsterCount = #monsterList;
+    local monsterCount = #self.monsterList;
     for monsterIndex = 1, monsterCount do
-        local monster = monsterList[monsterIndex];
-        if monster and MONSTER_STATUS_DEAD == monster:getStatus() then
-            table.remove(monsterList, monsterIndex)
-            monster:removeFromParent();
+        local monster = self.monsterList[monsterIndex];
+        if monster and monster:isDead() then
+            table.remove(self.monsterList, monsterIndex)
+            monster:removeFromParent();  --
         end
     end
 
-    local monsterCount = #monsterList;
-    for monsterIndex = 1, monsterCount do
-        local monster = monsterList[monsterIndex];
-        if monster and MONSTER_STATUS_DEAD == monster:getStatus() then
-            table.remove(monsterList, monsterIndex)
-            monster:removeFromParent();
+    for _, role in ipairs(self.roleList) do 
+        local rX, rY = role:getPosition()
+        local list = {}
+        for _, monster in ipairs(self.monsterList) do 
+            local mX, mY = monster:getPosition()
+            local distance = cc.pGetDistance(cc.p(rX, rY), cc.p(mX, mY))
+            if distance <= role:getAttackRadius() then 
+                table.insert(list, monster)
+            end
         end
-    end
 
-    local enemyBulletCount = #enemyBulletList;
-    for enemyBulletIndex = 1, enemyBulletCount do
-        local bullut = enemyBulletList[enemyBulletIndex];
-        if bullut and BULLET_STATUS_CLEAR == bullut:getStatus() then
-            table.remove(enemyBulletList, enemyBulletIndex)
-            bullut:removeFromParent();
+        if #list > 0 then 
+            role:setTargetList(list)
         end
     end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function GameLayer:updateBattleFog()
@@ -385,59 +336,5 @@ function GameLayer:resume()
     self:scheduleUpdate();
 end
 
-
-
---touch 事件
-function GameLayer:registTouch()
-    local onBegan = function(touch, event)
-        return self:onTouchBegan(touch, event)
-    end
-
-    local onMove = function(touch, event)
-        self:onTouchMoved(touch, event)
-    end
-
-    local onEnded = function(touch, event)
-        self:onTouchEnded(touch, event)
-    end
-
-    local onCancelled = function(touch, event)
-        self:onCancelled(touch, event)
-    end
-
-    local listener = cc.EventListenerTouchOneByOne:create()
-    listener:registerScriptHandler(onBegan, cc.Handler.EVENT_TOUCH_BEGAN )
-    listener:registerScriptHandler(onMove, cc.Handler.EVENT_TOUCH_MOVED )
-    listener:registerScriptHandler(onEnded, cc.Handler.EVENT_TOUCH_ENDED )
-    listener:registerScriptHandler(onCancelled, cc.Handler.EVENT_TOUCH_CANCELLED )
-
-    local eventDispatcher = self:getEventDispatcher()
-    eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
-
-    local function sceneEventHandler(eventType)
-        if eventType == "enter" then
-            if self.onEnter then self:onEnter() end
-        elseif eventType == "exit" then
-            if self.onExit then self:onExit() end
-        end
-    end
-
-    self:registerScriptHandler(sceneEventHandler)
-
-    if device.platform == "windows" then
-        local onKeyPressed = function(keyCode, event)
-            return self:onKeyPressed(keyCode, event)
-        end
-
-        local onKeyReleased = function(keyCode, event)
-            self:onKeyReleased(keyCode, event)
-        end
-
-        listener = cc.EventListenerKeyboard:create()
-        listener:registerScriptHandler(onKeyPressed, cc.Handler.EVENT_KEYBOARD_PRESSED)
-        listener:registerScriptHandler(onKeyReleased, cc.Handler.EVENT_KEYBOARD_RELEASED)
-        eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
-    end
-end
 
 return GameLayer

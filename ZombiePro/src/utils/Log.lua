@@ -230,9 +230,9 @@ end
 
 --可以打印所有的对象
 function look(obj, str)
-    -- if not DEBUG_MOD then 
-    --     return
-    -- end
+    if not DEBUG_MOD then 
+        return
+    end
 
     if not obj then
         print('  =============> ' .. str .. ' nil')

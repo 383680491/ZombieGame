@@ -56,11 +56,11 @@ setSearchPath()
 require "config"
 require "cocos.init"
 require "utils.Log"
+G_Utils = require "utils.Utils"
 require "ui.base.UIDef"
 require "utils.SLUI"
 local EventEmitter = require "utils.EventEmitter"
 G_Def = require "common.Define"
-
 
 
 -----------------------------------------------------------------
