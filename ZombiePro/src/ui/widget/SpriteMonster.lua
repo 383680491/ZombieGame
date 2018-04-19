@@ -13,13 +13,19 @@ function SpriteMonster:ctor(...)
 
     self.speed = 1
 
-    self:getTorwardIDByDir()
-    self:runAnimal()
+    --self:getTorwardIDByDir()
+    --self:runAnimal()
+    self.mainSprite:loadTexture('monster.png')
+    self.mainSprite:setScale(0.5)
     self:scheduleUpdate();
 
     self.status = 'stand'
     self.second = 0
     self.canInitPath = false
+
+    -- if DEBUG_MOD then 
+    --     self:drawRect()
+    -- end
 end
 
 function SpriteMonster:scheduleUpdate()
@@ -45,7 +51,7 @@ function SpriteMonster:update(dt)
         end
 
         if self.canInitPath then 
-            local x, y = self.gameLayer.role:getPosition()
+            local x, y = self.gameLayer.mainRole:getPosition()
             self:findPath(self.gameLayer.mainMap:space2Tile(cc.p(x, y)));
             self.canInitPath = false
         end
@@ -54,6 +60,11 @@ function SpriteMonster:update(dt)
         local x, y = self:getPosition()
         local curPos = cc.p(x, y)
         self.dirAtor = G_Utils.getDirVector(curPos, curDestPos)
+
+        local radian = cc.pToAngleSelf(self.dirAtor)
+        local angle = radian / 3.14159 * 180 --弧度变角度 
+        self:setRotation(270 - angle)
+
         self.status = 'run'
     elseif self.status == 'run' then
         local posX, posY = self:getPosition()

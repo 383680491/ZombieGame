@@ -68,24 +68,25 @@ function GameLayer:init()
     self.mainMap:addChild(self.mainRole)
     table.insert(self.roleList, self.mainRole)
 
-    -- for i= 1, 200 do 
-    --     local x = math.random(200, 800)
-    --     local y = math.random(200, 800)
-    --     local SpriteMonster = require 'ui.widget.SpriteMonster'
-    --     local monster = SpriteMonster:new(20005)
-    --     monster:setPosition(cc.p(x, y))
-    --     monster:setGameLayer(self)
-    --     self.mainMap:addChild(monster)
-    --     table.insert(self.monsterList, monster)
-    --     monster:createPath()
-    --     monster:findPath(self.mainMap:space2Tile(cc.p(1200, 430)))
-    -- end
+    for i= 1, 1 do 
+        local x = math.random(200, 800)
+        local y = math.random(200, 800)
+        local SpriteMonster = require 'ui.widget.SpriteMonster'
+        local monster = SpriteMonster:new(20005)
+        monster:setPosition(cc.p(900, 330))
+        monster:setGameLayer(self)
+        self.mainMap:addChild(monster)
+        table.insert(self.monsterList, monster)
+        monster:createPath()
+        monster:findPath(self.mainMap:space2Tile(cc.p(1200, 430)))
+    end
 
     self.mapSize = cc.size(self.mainMap:getMapSize().width * self.mainMap:getTileSize().width,
         self.mainMap:getMapSize().height * self.mainMap:getTileSize().height);
     self:scheduleUpdate();
     --self:updateBattleFog();
     self:registerTouch()
+    self:registerKey()
 end
 
 function GameLayer:initJoy()
@@ -99,9 +100,9 @@ function GameLayer:initJoy()
 end
 
 function GameLayer:onJoyStickUpdate(joyStick, angle, direct, power)
-    look(angle, 'angle')
-    look(direct, 'direct')
-    look(power, 'power')
+    -- look(angle, 'angle')
+    -- look(direct, 'direct')
+    -- look(power, 'power')
 
     self.mainRole:move(angle, direct, power)
 end
@@ -128,6 +129,7 @@ end
 
 function GameLayer:update(dt)
     self:setMapScrollPosition(dt);
+    self:dealCollision()
     --self:updateBattleFog();
 end
 
@@ -152,13 +154,19 @@ function GameLayer:onTouchBegan(touch, event)
    -- look(pos, 'onTouchBegan pos')
 
     local heroPosX, heroPosY = self.mainRole:getPositionX(), self.mainRole:getPositionY();
-    if self.mainMap:pathHasBlock(cc.p(heroPosY, heroPosY), pos) then 
-        look('block！！！！！！！！！！！！！！！！！！！！！！！！！')
-    else
-        look('NONOONOONONONONO~~~~~~~~~~~block')
-    end
+    -- if self.mainMap:pathHasBlock(cc.p(heroPosY, heroPosY), pos) then 
+    --     look('block！！！！！！！！！！！！！！！！！！！！！！！！！')
+    -- else
+    --     look('NONOONOONONONONO~~~~~~~~~~~block')
+    -- end
 
     return true
+end
+
+function GameLayer:onKeyPressed(code, event)
+    if code == cc.KeyCode['KEY_K'] then 
+        self:attack()
+    end
 end
 
 function GameLayer:dealCollision(dt)
@@ -182,13 +190,14 @@ function GameLayer:dealCollision(dt)
             end
         end
 
-        if #list > 0 then 
-            role:setTargetList(list)
-        end
+        role:setTargetList(list)
     end
 end
 
 
+function GameLayer:attack()
+    self.mainRole:attack()
+end
 
 
 

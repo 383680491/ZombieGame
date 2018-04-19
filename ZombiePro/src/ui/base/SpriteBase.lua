@@ -1,7 +1,8 @@
 local SpriteBase = class('SpriteBase', NodeAStar) --NodeAStar
 
 function SpriteBase:ctor()
-    self.mainSprite = cc.Sprite:create()
+    --self.mainSprite = cc.Sprite:create()
+    self.mainSprite = ccui.ImageView:create()
     self:addChild(self.mainSprite)
 
     self.dir = G_Def.DIR_UP
@@ -19,12 +20,40 @@ function SpriteBase:ctor()
     self.hp = 5
 end
 
+function SpriteBase:getHurtRadius()
+    return self.hurtRadius
+end
+
+function SpriteBase:getAttackRadius()
+    return self.attackRadius
+end
+
+function SpriteBase:getWarningRadiis()
+    return self.warningRadiis
+end
+
+function SpriteBase:isDead()
+    return self.hp <= 0
+end
+
+function SpriteBase:drawRect()
+    local drawNode = cc.DrawNode:create()
+    self:addChild(drawNode, 100)
+    local x, y = self:getPosition()
+    drawNode:drawCircle(cc.p(x, y), self.hurtRadius, 0, 50, false, cc.c4f(0,0,1,1))  
+    drawNode:drawCircle(cc.p(x, y), self.attackRadius, 0, 50, false, cc.c4f(1,0,0,1))    
+end
+
+
+
+
+--下面这三个函数是针对三转二来的 比如孤胆枪手    不要删除
 function SpriteBase:runAnimal()   
     if self.dir ~= self.lastDir then 
         local animFrames = {}
         for i = 1, self.frameCount[self.action] do 
             local path = string.format(self.sourcePath, self.id, G_Def.ActionRelative[self.action], self.torwardId*10000 + i)
-            look(path, 'path')
+            --look(path, 'path')
             local frame =  cc.SpriteFrameCache:getInstance():getSpriteFrame(path)
             table.insert(animFrames, frame)
         end
@@ -96,28 +125,12 @@ function SpriteBase:getDirByJoyDir(angle, direct)
     end
 end
 
-function SpriteBase:getHurtRadius()
-    return self.hurtRadius
-end
 
-function SpriteBase:getAttackRadius()
-    return self.attackRadius
-end
 
-function SpriteBase:getWarningRadiis()
-    return self.warningRadiis
-end
 
-function SpriteBase:isDead()
-    return self.hp <= 0
-end
 
-function SpriteBase:drawRect()
-    local drawNode = cc.DrawNode:create()
-    self:addChild(drawNode, 100)
-    local x, y = self:getPosition()
-    drawNode:drawCircle(cc.p(x, y), self.hurtRadius, 0, 50, false, cc.c4f(0,0,1,1))  
-    drawNode:drawCircle(cc.p(x, y), self.attackRadius, 0, 50, false, cc.c4f(1,0,0,1))    
-end
+
+
+
 
 return SpriteBase

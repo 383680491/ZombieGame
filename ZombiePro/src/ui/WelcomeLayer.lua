@@ -76,17 +76,6 @@ end
 
 
 function Welcomelayer:onJoyStickUpdate(joyStick, angle, direct, power)
-    -- local hero = self.world:getHero()
-    -- if hero then
-    --     hero:go(angle, direct, power)
-    -- end  
-    look(angle, 'angle')
-    look(direct, 'direct')
-    look(power, 'power')
-
-    self.role:getDirByJoyDir(direct, angle)
-    self.role:getTorwardIDByDir()
-    self.role:runAnimal()
 end
 
 function Welcomelayer:onJoyStickUpdate_right(joyStick,angle, direct, power)

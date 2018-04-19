@@ -79,6 +79,7 @@ function BaseView:registerKey()
         listener = cc.EventListenerKeyboard:create()
         listener:registerScriptHandler(onKeyPressed, cc.Handler.EVENT_KEYBOARD_PRESSED)
         listener:registerScriptHandler(onKeyReleased, cc.Handler.EVENT_KEYBOARD_RELEASED)
+        local eventDispatcher = self:getEventDispatcher()
         eventDispatcher:addEventListenerWithSceneGraphPriority(listener, self)
     end
 end
@@ -272,6 +273,8 @@ function BaseView:onExit()
 end
 
 function BaseView:onKeyPressed(code, event)
+end
+function BaseView:onKeyReleased(code, event)
 end
 
 function BaseView:onTouchBegan(touch, event)
