@@ -15,7 +15,10 @@ function SpriteRole:ctor(...)
 --    self:runAnimal()
     self.mainSprite:loadTexture('solder.png')
 
+    --简单选定，仅仅只是判断距离不考虑其他因素
     self.targetList = {}
+    --刷选出肯定能攻击的，比如距离够但是墙的阻隔，或者怪物无敌 等等~~~
+    self.curSelectTargetList = {}
     self.gunConfig = {
         targetCount = 1,
         harm = 3,
@@ -170,6 +173,7 @@ function SpriteRole:attack()
 end
 
 function SpriteRole:setTargetList(list)
+    self.curSelectTargetList = {}
     self.targetList = list
 end
 
