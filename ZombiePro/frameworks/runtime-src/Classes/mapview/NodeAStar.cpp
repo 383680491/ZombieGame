@@ -65,6 +65,23 @@ void NodeAStar::deleteDoneNode()
 	AStarPath = AStarPath->Next;
 }
 
+int NodeAStar::getPathCount()
+{
+	if (AStarPath == NULL)
+		return 0;
+
+	_AstarNode* temp = AStarPath;
+	int count = 0;
+
+	while (temp)
+	{
+		count++;
+		temp = temp->Next;
+	}
+
+	return count;
+}
+
 
 
 

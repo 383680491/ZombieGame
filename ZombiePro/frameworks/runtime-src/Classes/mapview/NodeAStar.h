@@ -17,6 +17,7 @@ public:
 	inline void setMap(MapView* map){ m_pMap = map; }
 	void createPath();
 	void findPath(Point desPoint);
+	int getPathCount();
 	_AstarNode* getPathNode();
 	void deleteDoneNode();
 private:
