@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<imgs height="720" tag="0" width="1280">
+	<img>map_1#0_0_512_512.png</img>
+	<img>map_1#0_512_512_208.png</img>
+	<img>map_1#512_0_512_512.png</img>
+	<img>map_1#512_512_512_208.png</img>
+	<img>map_1#1024_0_256_512.png</img>
+	<img>map_1#1024_512_256_208.png</img>
+</imgs>
