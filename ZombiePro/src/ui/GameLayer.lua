@@ -54,7 +54,7 @@ function GameLayer:init()
 
     local GameMap = require 'ui.GameMap'
     self.mainMap = GameMap:new()
-    self.mainMap:loadMapNew('mapnew/hujz.tmx', 1001, cc.p(0, 0))
+    self.mainMap:loadMapNew('tileMap/map_1.tmx', 1001, cc.p(0, 0))
     self.mainLayer:addChild(self.mainMap, 5000, 5000);
 
     local spriteFrameCache = cc.SpriteFrameCache:getInstance()
@@ -63,7 +63,7 @@ function GameLayer:init()
 
     local SpriteRole = require 'ui.widget.SpriteRole'
     self.mainRole = SpriteRole:new(5110511)
-    self.mainRole:setPosition(cc.p(1200, 430))
+    self.mainRole:setPosition(cc.p(600, 430))
     self.mainRole:setGameLayer(self)
     self.mainMap:addChild(self.mainRole)
     table.insert(self.roleList, self.mainRole)
@@ -78,7 +78,7 @@ function GameLayer:init()
         self.mainMap:addChild(monster)
         table.insert(self.monsterList, monster)
         monster:createPath()
-        monster:findPath(self.mainMap:space2Tile(cc.p(1200, 430)))
+        monster:findPath(self.mainMap:space2Tile(cc.p(600, 430)))
     end
 
     self.mapSize = cc.size(self.mainMap:getMapSize().width * self.mainMap:getTileSize().width,
@@ -153,8 +153,8 @@ function GameLayer:onTouchBegan(touch, event)
     local pos = self.mainMap:convertToNodeSpace(touchPoint)
    -- look(pos, 'onTouchBegan pos')
 
-    local heroPosX, heroPosY = self.mainRole:getPositionX(), self.mainRole:getPositionY();
-    -- if self.mainMap:pathHasBlock(cc.p(heroPosY, heroPosY), pos) then 
+    -- local heroPosX, heroPosY = self.mainRole:getPositionX(), self.mainRole:getPositionY();
+    -- if self.mainMap:pathHasBlock(cc.p(heroPosX, heroPosY), pos) then 
     --     look('block！！！！！！！！！！！！！！！！！！！！！！！！！')
     -- else
     --     look('NONOONOONONONONO~~~~~~~~~~~block')

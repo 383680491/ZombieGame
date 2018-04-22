@@ -13,6 +13,8 @@ function GameMap:ctor()
     self.origin = cc.Director:getInstance():getVisibleOrigin()
     self.schedulerID = nil
 
+    -- self.drawNode = cc.DrawNode:create()
+    -- self:addChild(self.drawNode, 100)
 end
 
 function GameMap:registTouch()
@@ -45,10 +47,13 @@ function GameMap:pathHasBlock(beginPos, endPos)
 
     local temp = beginPos
     local tempTile = beginTile
-
     while not cc.pEqu(tempTile, endTile) do 
         temp = cc.pAdd(temp, cc.pMul(vector, tileWidth))
         tempTile = self:space2Tile(temp)
+
+        -- local xxx = self:tile2Space(tempTile)
+        -- self.drawNode:drawRect(xxx, cc.pAdd(xxx, cc.p(32, 32)), cc.c4f(0,1,1,1))
+        
         if self:isBlock(tempTile) then 
             return true
         end
