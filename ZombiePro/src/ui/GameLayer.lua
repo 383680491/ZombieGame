@@ -68,7 +68,7 @@ function GameLayer:init()
     self.mainMap:addChild(self.mainRole)
     table.insert(self.roleList, self.mainRole)
 
-    for i= 1, 1 do 
+    for i= 1, 3 do 
         local x = math.random(200, 800)
         local y = math.random(200, 800)
         local SpriteMonster = require 'ui.widget.SpriteMonster'
@@ -78,7 +78,7 @@ function GameLayer:init()
         self.mainMap:addChild(monster)
         table.insert(self.monsterList, monster)
         monster:createPath()
-        monster:findPath(self.mainMap:space2Tile(cc.p(600, 430)))
+        monster:findPath(self.mainMap:space2Tile(cc.p(self.mainRole:getPositionX(), self.mainRole:getPositionY())))
     end
 
     self.mapSize = cc.size(self.mainMap:getMapSize().width * self.mainMap:getTileSize().width,

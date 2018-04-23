@@ -215,26 +215,27 @@ function SpriteRole:getDirByTarget()
 end
 
 function SpriteRole:displayAttack()
-    local x, y = self:getPosition()
-    local target = self.curSelectTargetList[1]
-    local tx, ty = target:getPosition()
-    local vector = G_Utils.getDirVector(cc.p(tx, ty), cc.p(x, y))
+    for _, target in ipairs(self.curSelectTargetList) do 
+        local x, y = self:getPosition()
+        local tx, ty = target:getPosition()
+        local vector = G_Utils.getDirVector(cc.p(tx, ty), cc.p(x, y))
 
-    local len = cc.pGetDistance(cc.p(x, y), cc.p(tx, ty))
-    local radian = cc.pToAngleSelf(vector)
-    local angle = radian / 3.14159 * 180 --弧度变角度 
-    local image = ccui.ImageView:create('track.png')
-    image:setAnchorPoint(0, 0.5)
-    image:setRotation(180 - angle)   --角度是逆时针向上旋转  而setRotation顺时针向下旋转
-    image:setPosition(cc.p(x, y))
-    self:getParent():addChild(image, 100, 100)
+        local len = cc.pGetDistance(cc.p(x, y), cc.p(tx, ty))
+        local radian = cc.pToAngleSelf(vector)
+        local angle = radian / 3.14159 * 180 --弧度变角度 
+        local image = ccui.ImageView:create('track.png')
+        image:setAnchorPoint(0, 0.5)
+        image:setRotation(180 - angle)   --角度是逆时针向上旋转  而setRotation顺时针向下旋转
+        image:setPosition(cc.p(x, y))
+        self:getParent():addChild(image, 100, 100)
 
-    image:runAction(cc.Sequence:create(cc.FadeOut:create(1), cc.CallFunc:create(function(sender) 
-        sender:removeFromParent()
-    end)))
+        image:runAction(cc.Sequence:create(cc.FadeOut:create(1), cc.CallFunc:create(function(sender) 
+            sender:removeFromParent()
+        end)))
 
-    local width = image:getContentSize().width
-    image:setScaleX(len / width)
+        local width = image:getContentSize().width
+        image:setScaleX(len / width)
+    end
 end
 
 function SpriteRole:attack()

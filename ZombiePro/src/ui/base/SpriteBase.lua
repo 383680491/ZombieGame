@@ -16,6 +16,7 @@ function SpriteBase:ctor()
     self.hurtRadius = 50   --受伤范围
     self.attackRadius = 100  --攻击范围
     self.warningRadiis = -1  --警戒范围   （-1是全屏 这个参数应该只有怪物会用到，在警戒范围内，会寻找目标攻击）
+    self.buffList = {}
 
     self.hp = 5
 end
@@ -44,6 +45,18 @@ function SpriteBase:drawRect()
     drawNode:drawCircle(cc.p(x, y), self.attackRadius, 0, 50, false, cc.c4f(1,0,0,1))    
 end
 
+function SpriteBase:addBuf(id)
+    if not self.buffList[id] then 
+        self.buffList[id] = NodeBuff:new(self, id)
+        self:addChild(self.buffList[id])
+    else
+        self.buffList[id]:reset()
+    end
+end
+
+function SpriteBase:deleteBuf(id) 
+    self.buffList[id] = nil
+end
 
 
 

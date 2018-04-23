@@ -51,6 +51,14 @@ function SpriteMonster:update(dt)
     self.second = self.second + dt
     self.halfSecond = self.halfSecond + dt
 
+    -- for bufId, target in pairs(self.buffList) do 
+    --     if bufId
+    -- end
+
+
+
+
+
     if self.status == 'stand' then 
         self.curDestTile = self:getPathNode()
 
