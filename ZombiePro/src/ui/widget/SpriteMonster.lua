@@ -29,12 +29,9 @@ function SpriteMonster:ctor(...)
     self.halfSecond = 0
     self.canInitPath = false
     self.findPathStatus = FindPath_Star
-
     if DEBUG_MOD then 
         self:drawRect()
     end
-
-    self.fuck = true
 end
 
 function SpriteMonster:scheduleUpdate()
@@ -51,10 +48,6 @@ function SpriteMonster:setGameLayer(gameLayer)
 end
 
 function SpriteMonster:update(dt)
-    if not self.fuck then 
-        return
-    end
-
     self.second = self.second + dt
     self.halfSecond = self.halfSecond + dt
 
@@ -103,10 +96,8 @@ function SpriteMonster:update(dt)
                     break
                 end
             end
-            look(flag, 'right')
             if flag ~= -1 then 
-                self.fuck = false
-                curDestPos.x = curDestPos.x - flag*wCount
+                curDestPos.x = curDestPos.x - (wCount - flag) * tileWidth
             end
 
             --左边
@@ -118,40 +109,34 @@ function SpriteMonster:update(dt)
                     break
                 end
             end
-            look(flag, 'left')
             if flag ~= -1 then 
-                self.fuck = false
-                curDestPos.x = curDestPos.x + flag*wCount
+                curDestPos.x = curDestPos.x + (wCount - flag + 1) * tileWidth
             end
 
             --上边
             flag = -1
             for i = hCount - 1, 1, -1 do 
-                local isBlock = self.gameLayer.mainMap:isBlock(cc.pAdd(self.curDestTile, cc.p(0, i)))
-                if isBlock then 
-                    flag = i
-                    break
-                end
-            end
-            look(flag, 'up')
-            if flag ~= -1 then 
-                self.fuck = false
-                curDestPos.y = curDestPos.y - flag*wCount
-            end
-
-            --下边
-            flag = -1
-            for i = hCount, 1, -1 do 
                 local isBlock = self.gameLayer.mainMap:isBlock(cc.pSub(self.curDestTile, cc.p(0, i)))
                 if isBlock then 
                     flag = i
                     break
                 end
             end
-            look(flag, 'down')
             if flag ~= -1 then 
-                self.fuck = false
-                curDestPos.y = curDestPos.y + flag*wCount
+                curDestPos.y = curDestPos.y - (hCount - flag) * tileHeight
+            end
+
+            --下边
+            flag = -1
+            for i = hCount, 1, -1 do 
+                local isBlock = self.gameLayer.mainMap:isBlock(cc.pAdd(self.curDestTile, cc.p(0, i)))
+                if isBlock then 
+                    flag = i
+                    break
+                end
+            end
+            if flag ~= -1 then 
+                curDestPos.y = curDestPos.y + (hCount - flag + 1) * tileHeight
             end
 
             self.curDestTile = self.gameLayer.mainMap:space2Tile(curDestPos)
