@@ -16,7 +16,7 @@ function SpriteMonster:ctor(...)
         [G_Def.ACTION_WALK] = 4,
     }
 
-    self.speed = 1
+    self.speed = 2
 
     --self:getTorwardIDByDir()
     --self:runAnimal()
@@ -47,13 +47,25 @@ function SpriteMonster:setGameLayer(gameLayer)
     self:setMap(self.gameLayer.mainMap)
 end
 
+function SpriteMonster:hurt(harmValue, buffId)
+    self:addBuff(buffId)
+end
+
 function SpriteMonster:update(dt)
+    local speed = self.speed
     self.second = self.second + dt
     self.halfSecond = self.halfSecond + dt
 
-    -- for bufId, target in pairs(self.buffList) do 
-    --     if bufId
-    -- end
+    for bufId, target in pairs(self.buffList) do 
+        if target:isOver() then 
+            target:removeFromParent()
+            self.buffList[bufId] = nil
+        else
+            if bufId == 101 then 
+                speed = 0
+            end
+        end
+    end
 
 
 
@@ -161,8 +173,8 @@ function SpriteMonster:update(dt)
         self.status = 'run'
     elseif self.status == 'run' then
         local posX, posY = self:getPosition()
-        local x = self.speed * self.dirAtor.x + posX
-        local y = self.speed * self.dirAtor.y + posY
+        local x = speed * self.dirAtor.x + posX
+        local y = speed * self.dirAtor.y + posY
 
         self:setPosition(cc.p(x, y))
 

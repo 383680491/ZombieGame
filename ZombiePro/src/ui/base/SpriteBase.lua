@@ -1,3 +1,4 @@
+local NodeBuff = require 'ui.widget.NodeBuff'
 local SpriteBase = class('SpriteBase', NodeAStar) --NodeAStar
 
 function SpriteBase:ctor()
@@ -45,19 +46,14 @@ function SpriteBase:drawRect()
     drawNode:drawCircle(cc.p(x, y), self.attackRadius, 0, 50, false, cc.c4f(1,0,0,1))    
 end
 
-function SpriteBase:addBuf(id)
+function SpriteBase:addBuff(id)
     if not self.buffList[id] then 
-        self.buffList[id] = NodeBuff:new(self, id)
+        self.buffList[id] = NodeBuff.new(self, id)
         self:addChild(self.buffList[id])
     else
         self.buffList[id]:reset()
     end
 end
-
-function SpriteBase:deleteBuf(id) 
-    self.buffList[id] = nil
-end
-
 
 
 --下面这三个函数是针对三转二来的 比如孤胆枪手    不要删除

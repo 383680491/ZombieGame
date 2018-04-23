@@ -73,7 +73,7 @@ function GameLayer:init()
         local y = math.random(200, 800)
         local SpriteMonster = require 'ui.widget.SpriteMonster'
         local monster = SpriteMonster:new(20005)
-        monster:setPosition(cc.p(900, 330))
+        monster:setPosition(cc.p(x, y))
         monster:setGameLayer(self)
         self.mainMap:addChild(monster)
         table.insert(self.monsterList, monster)

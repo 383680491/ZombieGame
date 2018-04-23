@@ -20,7 +20,7 @@ function SpriteRole:ctor(...)
         [G_Def.ACTION_STAND] = 3,
     }
 
-    self.speed = 8
+    self.speed = 4
 
 --    self:getTorwardIDByDir()
 --    self:runAnimal()
@@ -229,8 +229,11 @@ function SpriteRole:displayAttack()
         image:setPosition(cc.p(x, y))
         self:getParent():addChild(image, 100, 100)
 
-        image:runAction(cc.Sequence:create(cc.FadeOut:create(1), cc.CallFunc:create(function(sender) 
+        image.__userdata__ = target
+        image:runAction(cc.Sequence:create(cc.FadeOut:create(0.3), cc.CallFunc:create(function(sender) 
+            local tar = sender.__userdata__
             sender:removeFromParent()
+            tar:hurt(5, 101)
         end)))
 
         local width = image:getContentSize().width
@@ -282,6 +285,7 @@ function SpriteRole:attack()
     self:setRotation(270 - angle)
 
     self:displayAttack()
+
 end
 
 function SpriteRole:setTargetList(list)

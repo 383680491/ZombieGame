@@ -61,6 +61,7 @@ require "ui.base.UIDef"
 require "utils.SLUI"
 local EventEmitter = require "utils.EventEmitter"
 G_Def = require "common.Define"
+G_ConfigUtils = require 'ui.ConfigUtils'
 
 
 -----------------------------------------------------------------
