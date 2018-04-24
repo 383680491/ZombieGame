@@ -47,10 +47,6 @@ function SpriteMonster:setGameLayer(gameLayer)
     self:setMap(self.gameLayer.mainMap)
 end
 
-function SpriteMonster:hurt(harmValue, buffId)
-    self:addBuff(buffId)
-end
-
 function SpriteMonster:update(dt)
     local speed = self.speed
     self.second = self.second + dt
@@ -63,13 +59,36 @@ function SpriteMonster:update(dt)
         else
             if bufId == 101 then 
                 speed = 0
+            elseif bufId == 102 then
+
             end
         end
     end
 
+    --击飞状态下的逻辑
+    if self.strikeFlyInfo then 
+        if self.strikeFlyInfo.time <= 0 then 
+            self.status = 'stand'
+            self.canInitPath = true
+            self.strikeFlyInfo = nil
+            return
+        end
 
+        local posX, posY = self:getPosition()
+        local x = speed * self.strikeFlyInfo.dirAtor.x + posX
+        local y = speed * self.strikeFlyInfo.dirAtor.y + posY
+        local tile = self.gameLayer.mainMap:space2Tile(cc.p(x, y))
+        local isBlock = self.gameLayer.mainMap:isBlock(tile)
 
+        if isBlock then 
+            self.strikeFlyInfo = nil
+        else
+            self:setPosition(cc.p(x, y))
+            self.strikeFlyInfo.time = self.strikeFlyInfo.time - dt
+        end
 
+        return
+    end
 
     if self.status == 'stand' then 
         self.curDestTile = self:getPathNode()
@@ -219,6 +238,10 @@ function SpriteMonster:update(dt)
             self:setRotation(270 - angle)
         end
     end
+end
+--击飞strikeFly
+function SpriteMonster:strikeFly(data)
+    self.strikeFlyInfo = data
 end
 
 return SpriteMonster

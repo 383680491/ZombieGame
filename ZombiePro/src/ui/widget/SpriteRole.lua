@@ -46,14 +46,53 @@ function SpriteRole:ctor(...)
     end
 end
 
+function SpriteRole:scheduleUpdate()
+    local update = function(dt)
+        self:update(dt);
+    end
+
+    self:scheduleUpdateWithPriorityLua(update, 0);
+end
+
 function SpriteRole:setGameLayer(gameLayer)
     self.gameLayer = gameLayer
+end
+
+function SpriteRole:update(dt)
+    --击飞状态下的逻辑
+    if self.strikeFlyInfo then 
+        if self.strikeFlyInfo.time <= 0 then 
+            self.strikeFlyInfo = nil
+            return
+        end
+
+        local posX, posY = self:getPosition()
+        local x = speed * self.strikeFlyInfo.dirAtor.x + posX
+        local y = speed * self.strikeFlyInfo.dirAtor.y + posY
+        local tile = self.gameLayer.mainMap:space2Tile(cc.p(x, y))
+        local isBlock = self.gameLayer.mainMap:isBlock(tile)
+
+        if isBlock then 
+            self.strikeFlyInfo = nil
+        else
+            self:setPosition(cc.p(x, y))
+            self.strikeFlyInfo.time = self.strikeFlyInfo.time - dt
+        end
+
+        return
+    end
 end
 
 function SpriteRole:move(angle, direct, power)
     --self:getDirByJoyDir(angle, direct)
     --self:getTorwardIDByDir()
     --self:runAnimal()
+
+    --击飞和眩状态下遥感无效
+    if self.strikeFlyInfo then 
+        return
+    end
+
     if power < 0.3 then 
         power = 0        
     end
@@ -296,6 +335,10 @@ function SpriteRole:setTargetList(list)
     self.targetList = list
 end
 
+--击飞strikeFly
+function SpriteRole:strikeFly(data)
+    self.strikeFlyInfo = data
+end
 
 
 return SpriteRole

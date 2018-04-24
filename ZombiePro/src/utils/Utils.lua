@@ -18,6 +18,10 @@ function Utils.getTimeDisc(sec)
     end
 end
 
+function Utils.circleIntersect(pointA, radioA, pointB, radioB)
+    return cc.pGetDistance(pointA, pointB) <= (radioA + radioB)
+end
+
 
 
 

@@ -10,6 +10,7 @@ function NodeBuff:ctor(...)
     self.duringTime = 0
     self:scheduleUpdate()
     self.over = false
+    self.userdata = {}
 end
 
 function NodeBuff:scheduleUpdate()

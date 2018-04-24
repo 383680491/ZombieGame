@@ -46,6 +46,10 @@ function SpriteBase:drawRect()
     drawNode:drawCircle(cc.p(x, y), self.attackRadius, 0, 50, false, cc.c4f(1,0,0,1))    
 end
 
+function SpriteBase:hurt(harmValue, buffId)
+    self:addBuff(buffId)
+end
+
 function SpriteBase:addBuff(id)
     if not self.buffList[id] then 
         self.buffList[id] = NodeBuff.new(self, id)
