@@ -1,0 +1,30 @@
+<Solution>
+  <PropertyGroup Name="Zombie" Version="2.3.0.1" Type="CocosStudio" />
+  <SolutionFolder>
+    <Group ctype="ResourceGroup">
+      <RootFolder Name=".">
+        <Folder Name="csb">
+          <Folder Name="battle">
+            <Project Name="battle.csd" Type="Layer" />
+          </Folder>
+        </Folder>
+        <Folder Name="ui">
+          <Folder Name="battle">
+            <PlistImageFolder Image="battle.png" PListFile="battle.plist" Name=".battle_PList.Dir">
+              <PlistImageFile Name="battle_JoyStick_1.png" Key="battle/JoyStick_1.png" />
+              <PlistImageFile Name="battle_JoyStick_2.png" Key="battle/JoyStick_2.png" />
+              <PlistImageFile Name="battle_blood_bar_1.png" Key="battle/blood_bar_1.png" />
+              <PlistImageFile Name="battle_blood_bar_2.png" Key="battle/blood_bar_2.png" />
+              <PlistImageFile Name="battle_button_other.png" Key="battle/button_other.png" />
+              <PlistImageFile Name="battle_button_pause.png" Key="battle/button_pause.png" />
+              <PlistImageFile Name="battle_button_set.png" Key="battle/button_set.png" />
+              <PlistImageFile Name="battle_button_shoot.png" Key="battle/button_shoot.png" />
+              <PlistImageFile Name="battle_photo_frame.png" Key="battle/photo_frame.png" />
+            </PlistImageFolder>
+            <Image Name="battle.png" />
+          </Folder>
+        </Folder>
+      </RootFolder>
+    </Group>
+  </SolutionFolder>
+</Solution>
