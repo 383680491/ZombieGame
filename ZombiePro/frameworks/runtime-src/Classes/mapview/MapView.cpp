@@ -407,7 +407,7 @@ bool MapView::loadMapNew(const std::string& filename, const  int mapId, const Po
 	}
 	else
 	{
-		m_perTileSize = Size(48, 32);
+		m_perTileSize = Size(32, 48);
 		m_mapSize = Size(400, 400);
 		m_block_str.resize(m_mapSize.width*m_mapSize.height, '0');
 	}
