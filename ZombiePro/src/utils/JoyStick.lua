@@ -8,22 +8,16 @@ function JoyStick:setDetegate(detegate)
     self.detegate = detegate
 end
 
-function JoyStick:setDetegate_right(detegate)
-    self.detegate_right = detegate
-end
-
-
-
 function JoyStick:ctor()
    
     self.bg = ccui.ImageView:create()
-    self.bg:loadTexture("XYDCJ_JP_dk.png")
+    self.bg:loadTexture("battle/JoyStick_1.png", 1)
     --self.bg:setScale(1.8)
     self.ball = ccui.ImageView:create()
-    self.ball:loadTexture("YXC_DSQ_DK.png")
+    self.ball:loadTexture("battle/JoyStick_2.png", 1)
 
-    self.ballRadius = 22.5     --旋转球半径
-    self.moveAreaRadius = 70  --旋转球活动半径
+    self.ballRadius = 45     --旋转球半径
+    self.moveAreaRadius = 132  --旋转球活动半径
     self.isFollowTouch = true  --是否跟随触摸
     self.isVisible = true     
     self.isAutoHide = false
@@ -38,8 +32,6 @@ function JoyStick:ctor()
     self.power = 0
     self.direct = 0
     self.detegate = nil
-
-    self.detegate_right = nil
 
     self:addChild(self.bg)
     self:addChild(self.ball)
@@ -209,10 +201,6 @@ function JoyStick:onFrame(dt)
     
     if self.detegate then 
         self.detegate:onJoyStickUpdate(self, self.angle, self.direct, self.power)
-    end
-
-    if self.detegate_right then 
-        self.detegate_right:onJoyStickUpdate_right(self, self.angle-90, self.direct, self.power)
     end
 end
 

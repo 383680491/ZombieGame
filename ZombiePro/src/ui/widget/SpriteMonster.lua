@@ -60,7 +60,7 @@ function SpriteMonster:update(dt)
             if bufId == 101 then 
                 speed = 0
             elseif bufId == 102 then
-
+                speed = 0
             end
         end
     end
@@ -75,8 +75,8 @@ function SpriteMonster:update(dt)
         end
 
         local posX, posY = self:getPosition()
-        local x = speed * self.strikeFlyInfo.dirAtor.x + posX
-        local y = speed * self.strikeFlyInfo.dirAtor.y + posY
+        local x = self.strikeFlyInfo.dirAtor.x + posX
+        local y = self.strikeFlyInfo.dirAtor.y + posY
         local tile = self.gameLayer.mainMap:space2Tile(cc.p(x, y))
         local isBlock = self.gameLayer.mainMap:isBlock(tile)
 

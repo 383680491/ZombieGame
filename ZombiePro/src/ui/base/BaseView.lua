@@ -7,8 +7,10 @@ function BaseView:ctor()
     self.registIdList_bv = {};
     self.releaseNodeList_bv = {};
     self.emitEventList = {}
-    
 
+    self.visibleSize = cc.Director:getInstance():getVisibleSize()
+    self.winSize = cc.Director:getInstance():getWinSize()
+    self.origin = cc.Director:getInstance():getVisibleOrigin()
 
     -- if device.platform ~= "ios" then 
     --     --设置返回键

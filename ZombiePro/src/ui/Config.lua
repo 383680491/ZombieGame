@@ -1,7 +1,9 @@
 
 --101   玩家攻击怪物 会让怪物产生很短的暂停
+--102   眩晕
 G_BuffConfig = {
-    {id = 101, during = 0.2, isImage = true, isAnimal},
+    {id = 101, during = 0.2, isImage = true, isAnimal = false},
+    {id = 102, during = 1,   isImage = true, isAnimal = false},
 }
 
 

@@ -31,7 +31,7 @@ function SpriteRole:ctor(...)
     --刷选出肯定能攻击的，比如距离够但是墙的阻隔，或者怪物无敌 等等~~~
     self.curSelectTargetList = {}
     self.gunConfig = {
-        targetCount = 1,
+        targetCount = 3,
         harm = 3,
         frameAtor = 0.5,
     }
@@ -40,6 +40,7 @@ function SpriteRole:ctor(...)
     self.lock = false 
     self.curSelectTargetList = {}  --当前锁定的目标
     self.attackRadius = 300
+    self:scheduleUpdate()
 
     if DEBUG_MOD then 
         self:drawRect()
@@ -59,6 +60,19 @@ function SpriteRole:setGameLayer(gameLayer)
 end
 
 function SpriteRole:update(dt)
+
+    for bufId, target in pairs(self.buffList) do 
+        if target:isOver() then 
+            target:removeFromParent()
+            self.buffList[bufId] = nil
+        else
+            -- if bufId == 102 then
+            --     speed = 0
+            -- end
+        end
+    end
+
+
     --击飞状态下的逻辑
     if self.strikeFlyInfo then 
         if self.strikeFlyInfo.time <= 0 then 
@@ -67,8 +81,8 @@ function SpriteRole:update(dt)
         end
 
         local posX, posY = self:getPosition()
-        local x = speed * self.strikeFlyInfo.dirAtor.x + posX
-        local y = speed * self.strikeFlyInfo.dirAtor.y + posY
+        local x = self.strikeFlyInfo.dirAtor.x + posX
+        local y = self.strikeFlyInfo.dirAtor.y + posY
         local tile = self.gameLayer.mainMap:space2Tile(cc.p(x, y))
         local isBlock = self.gameLayer.mainMap:isBlock(tile)
 
@@ -91,6 +105,13 @@ function SpriteRole:move(angle, direct, power)
     --击飞和眩状态下遥感无效
     if self.strikeFlyInfo then 
         return
+    end 
+
+    --眩晕
+    for bufId, target in pairs(self.buffList) do  
+        if bufId == 102 then
+            return
+        end
     end
 
     if power < 0.3 then 

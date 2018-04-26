@@ -15,8 +15,8 @@ DEBUG_MOD = true
 
 -- for module display
 CC_DESIGN_RESOLUTION = {
-    width = 960,
-    height = 640,
+    width = 1280,
+    height = 720,
     autoscale = "FIXED_HEIGHT",
     callback = function(framesize)
         local ratio = framesize.width / framesize.height

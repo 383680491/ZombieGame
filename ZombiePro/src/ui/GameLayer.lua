@@ -21,15 +21,12 @@ end
 
 function GameLayer:ctor()
     GameLayer.super:ctor()
-    self.visibleSize = cc.Director:getInstance():getVisibleSize()
-    self.winSize = cc.Director:getInstance():getWinSize()
-    self.origin = cc.Director:getInstance():getVisibleOrigin()
     self.schedulerID = nil
     self:setMoudleId(G_LayerDefine.BATTLE_LAYER)
 end
 
 function GameLayer:init()
-    self.bombList = {};
+    self.mineList = {};
     self.roleList = {};
     self.monsterList = {}
 
@@ -48,6 +45,11 @@ function GameLayer:init()
     self.upLayer:setPosition(cc.p(0, 0));
     self:addChild(self.upLayer, 3, 3);
 
+    local GameUI = require 'ui.GameUI'
+    local layer = GameUI.new()
+    self.upLayer:addChild(layer)
+    layer:setGameLayer(self)
+
     self.topLayer = cc.Node:create();                            --顶层
     self.topLayer:setPosition(cc.p(0, 0));
     self:addChild(self.topLayer, 4, 4);
@@ -58,12 +60,11 @@ function GameLayer:init()
     self.mainLayer:addChild(self.mainMap, 5000, 5000);
 
     local spriteFrameCache = cc.SpriteFrameCache:getInstance()
-    spriteFrameCache:addSpriteFrames('role/role_5110511.plist', 'role/role_5110511.png') 
-    spriteFrameCache:addSpriteFrames('monster/20005.plist', 'monster/20005.png')
+    spriteFrameCache:addSpriteFrames('bomb.plist', 'bomb.png')
 
     local SpriteRole = require 'ui.widget.SpriteRole'
     self.mainRole = SpriteRole:new(5110511)
-    self.mainRole:setPosition(cc.p(600, 430))
+    self.mainRole:setPosition(cc.p(600, 100))
     self.mainRole:setGameLayer(self)
     self.mainMap:addChild(self.mainRole)
     table.insert(self.roleList, self.mainRole)
@@ -87,15 +88,23 @@ function GameLayer:init()
     --self:updateBattleFog();
     self:registerTouch()
     self:registerKey()
+
+    local SpriteMine = require 'ui.widget.SpriteMine'
+    local mine = SpriteMine:new()
+    mine:setGameLayer(self)
+    mine:setPosition(cc.p(900, 650))
+    self.mainMap:addChild(mine)
+    table.insert(self.mineList, mine)
+
 end
 
 function GameLayer:initJoy()
     local JoyStick = require 'utils.JoyStick'
     local JoyStick_left = JoyStick:create()
     JoyStick_left:setDetegate(self)
-    JoyStick_left.isFollowTouch = false
+    JoyStick_left.isFollowTouch = true
     JoyStick_left:setPosition(cc.p(300, 200))
-    JoyStick_left:setHitAreaWithRect(cc.rect(230, 130, 255, 255))
+    JoyStick_left:setHitAreaWithRect(cc.rect(0, 0, 640, 720))
     self:addChild(JoyStick_left, 4, 4)
 end
 
@@ -130,6 +139,7 @@ end
 function GameLayer:update(dt)
     self:setMapScrollPosition(dt);
     self:dealCollision()
+    self:deleteMine()
     --self:updateBattleFog();
 end
 
@@ -191,6 +201,17 @@ function GameLayer:dealCollision(dt)
         end
 
         role:setTargetList(list)
+    end
+end
+
+
+function GameLayer:deleteMine()
+    for i = 1, #self.mineList do 
+        local mine = self.mineList[i]
+        if mine and 5 == mine:getStatus() then 
+            mine:removeFromParent()
+            table.remove(self.mineList, i)
+        end
     end
 end
 
