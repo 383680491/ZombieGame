@@ -1,4 +1,15 @@
 local SpriteRole = class('SpriteRole', require 'ui.base.SpriteBase')
+local MineWasteTime = 5   --制造雷需要的时间
+local HelpStayTime = 0.3   --在死亡玩家旁边呆足这段时间才开始治疗
+local HelpDuringTime = 5   --治疗玩家所需要的时间
+
+local STATUS_HELP_NULL = 1 
+local STATUS_HELP_STAY = 2 
+local STATUS_HELP = 3
+local STATUS_HELPING = 4
+
+
+local SpriteMine = require 'ui.widget.SpriteMine'
 
 local getOneTrue = function(list)
     for idx, flag in ipairs(list) do 
@@ -21,6 +32,7 @@ function SpriteRole:ctor(...)
     }
 
     self.speed = 4
+    self.hurtRadius = 32    --受伤范围也是人物大小
 
 --    self:getTorwardIDByDir()
 --    self:runAnimal()
@@ -45,6 +57,9 @@ function SpriteRole:ctor(...)
     if DEBUG_MOD then 
         self:drawRect()
     end
+
+    self.helpStatus = STATUS_HELP_NULL
+    self.helpStayTime = saveStayTime
 end
 
 function SpriteRole:scheduleUpdate()
@@ -53,6 +68,102 @@ function SpriteRole:scheduleUpdate()
     end
 
     self:scheduleUpdateWithPriorityLua(update, 0);
+end
+
+--
+function SpriteRole:makeMine()
+    if self.mineNode then 
+        return
+    end
+
+    local time = MineWasteTime
+    self.mineNode = cc.Node:create()
+    self:addChild(self.mineNode)
+    self.mineNode:setPosition(cc.p(0, self.hurtRadius + 20))
+
+    local to = cc.ProgressTo:create(time, 100)
+    local spr = cc.ProgressTimer:create(cc.Sprite:create('progress.png'))
+    spr:setType(cc.PROGRESS_TIMER_TYPE_RADIAL)
+    spr:setPosition(cc.p(0, 0))
+    spr:runAction(cc.RepeatForever:create(to))
+    self.mineNode:addChild(spr)
+
+    local delayNode = cc.Node:create()
+    self.mineNode:addChild(delayNode)
+    delayNode:runAction(cc.Sequence:create(cc.DelayTime:create(time + 0.02), cc.CallFunc:create(function(sender)    
+        local parent = sender:getParent()
+        parent:removeFromParent()
+        self.mineNode = nil
+
+        local x, y = self:getPosition()
+        local mine = SpriteMine.new(self.gameLayer)
+        mine:setPosition(cc.p(x, y))
+        self.gameLayer.mainMap:addChild(mine)
+     end)))
+end
+
+function SpriteRole:judgeHelpFriend(dt)
+    if self.helpStatus == STATUS_HELP_NULL then 
+        for _,role in ipairs(self.gameLayer.roleList) do 
+            if role ~= self then
+                local x, y = self:getPosition() 
+                local rx, ry = role:getPosition() 
+                if math.abs(rx - x) <= self.hurtRadius and math.abs(ry - y) <= self.hurtRadius and role:getLifeStatus() == G_Def.STATUS_DEAD then 
+                    self.helpStatus = STATUS_HELP_STAY
+                    self.helpStayTime = HelpStayTime
+                    self.helpSelectFriend = role
+                    break
+                end
+            end
+        end
+    elseif self.helpStatus == STATUS_HELP_STAY then
+        self.helpStayTime = self.helpStayTime - dt
+        if self.helpStayTime <= 0 then 
+            self.helpFlag = STATUS_HELP
+        end
+    elseif self.helpStatus == STATUS_HELP then
+        self:helpFriend()
+        self.helpStatus = STATUS_HELPING
+    end
+end
+
+
+function SpriteRole:helpFriend()
+    if self.helpNode then 
+        return
+    end
+
+    local time = HelpDuringTime
+    self.helpNode = cc.Node:create()
+    self:addChild(self.helpNode)
+    self.helpNode:setPosition(cc.p(0, self.hurtRadius + 20))
+
+    local to = cc.ProgressTo:create(time, 100)
+    local spr = cc.ProgressTimer:create(cc.Sprite:create('progress.png'))
+    spr:setType(cc.PROGRESS_TIMER_TYPE_RADIAL)
+    spr:setPosition(cc.p(0, 0))
+    spr:runAction(cc.RepeatForever:create(to))
+    self.helpNode:addChild(spr)
+
+    local delayNode = cc.Node:create()
+    self.helpNode:addChild(delayNode)
+    delayNode:runAction(cc.Sequence:create(cc.DelayTime:create(time + 0.02), cc.CallFunc:create(function(sender)    
+        local parent = sender:getParent()
+        parent:removeFromParent()
+
+        self.helpNode = nil
+        if self.helpSelectFriend then 
+            self.helpSelectFriend:resurrection()
+        end
+ 
+        self.helpStatus = STATUS_HELP_NULL
+     end)))
+end
+
+
+--复活
+function SpriteRole:resurrection()
+    
 end
 
 function SpriteRole:setGameLayer(gameLayer)
@@ -72,7 +183,6 @@ function SpriteRole:update(dt)
         end
     end
 
-
     --击飞状态下的逻辑
     if self.strikeFlyInfo then 
         if self.strikeFlyInfo.time <= 0 then 
@@ -83,8 +193,21 @@ function SpriteRole:update(dt)
         local posX, posY = self:getPosition()
         local x = self.strikeFlyInfo.dirAtor.x + posX
         local y = self.strikeFlyInfo.dirAtor.y + posY
-        local tile = self.gameLayer.mainMap:space2Tile(cc.p(x, y))
-        local isBlock = self.gameLayer.mainMap:isBlock(tile)
+
+        if not self:inMapRange(cc.p(x, y)) then 
+            self.strikeFlyInfo = nil
+            return
+        end
+
+        local tileList = self:getNearTile()
+        local isBlock = false
+
+        for idx, tile in ipairs(tileList) do
+            isBlock = self.gameLayer.mainMap:isBlock(tile)
+            if isBlock then 
+                break
+            end
+        end
 
         if isBlock then 
             self.strikeFlyInfo = nil
@@ -122,18 +245,33 @@ function SpriteRole:move(angle, direct, power)
     local x = self.speed * direct.x * power + posX
     local y = self.speed * direct.y * power + posY
 
-    local map = self.gameLayer.mainMap
-    local tileList = {}
-    local flagList = {}
+    if x == posX and y == posY then 
+        return
+    end
 
-    tileList[1] = map:space2Tile(cc.p(x + 32, y + 32)) --分别对应 ↗ ↖ ↙ ↘  四个tile
-    tileList[2] = map:space2Tile(cc.p(x - 32, y + 32))
-    tileList[3] = map:space2Tile(cc.p(x - 32, y - 32))
-    tileList[4] = map:space2Tile(cc.p(x + 32, y - 32))
-    tileList[5] = map:space2Tile(cc.p(x + 32, y))     
-    tileList[6] = map:space2Tile(cc.p(x, y + 32))
-    tileList[7] = map:space2Tile(cc.p(x - 32, y))
-    tileList[8] = map:space2Tile(cc.p(x, y - 32))
+
+    --移动则立刻移除埋雷状态
+    if self.mineNode then 
+        self.mineNode:removeFromParent()
+        self.mineNode = nil
+    end
+
+
+    --移动则立刻停止治疗
+    if self.helpStatus ~= STATUS_HELP_NULL then 
+        self.helpNode:removeFromParent()
+        self.helpNode = nil
+        self.helpStatus = STATUS_HELP_NULL
+    end
+    
+
+    if not self:inMapRange(cc.p(x, y)) then 
+        return
+    end
+
+    local map = self.gameLayer.mainMap
+    local tileList = self:getNearTile()
+    local flagList = {}
 
     for idx, tile in ipairs(tileList) do   --如果直接判断有block就return 会感觉人物黏在墙上移不动 摇杆失效的感觉 
         flagList[idx] = map:isBlock(tile)
@@ -172,10 +310,11 @@ function SpriteRole:move(angle, direct, power)
     if count >= 3 then 
         return
     elseif 1 == count then  --这种最复杂  但只有一个点的时候 也得计算出到底是X方向导致的碰撞还是Y方向，这样子只能通过回溯的方式来
+        local radius = self.hurtRadius
         local idx = getOneTrue(flagList)
         if 1 == idx then 
-            local flag_x = map:isBlock(map:space2Tile(cc.p(x + 32, posY + 32)))
-            local flag_y = map:isBlock(map:space2Tile(cc.p(posX + 32, y + 32)))
+            local flag_x = map:isBlock(map:space2Tile(cc.p(x + radius, posY + radius)))
+            local flag_y = map:isBlock(map:space2Tile(cc.p(posX + radius, y + radius)))
             if flag_x and flag_y then 
                 return
             elseif flag_x and not flag_y then
@@ -186,8 +325,8 @@ function SpriteRole:move(angle, direct, power)
                 return
             end
         elseif 2 == idx then
-            local flag_x = map:isBlock(map:space2Tile(cc.p(x - 32, posY + 32)))
-            local flag_y = map:isBlock(map:space2Tile(cc.p(posX - 32, y + 32)))
+            local flag_x = map:isBlock(map:space2Tile(cc.p(x - radius, posY + radius)))
+            local flag_y = map:isBlock(map:space2Tile(cc.p(posX - radius, y + radius)))
             if flag_x and flag_y then 
                 return
             elseif flag_x and not flag_y then
@@ -198,8 +337,8 @@ function SpriteRole:move(angle, direct, power)
                 return
             end
         elseif 3 == idx then
-            local flag_x = map:isBlock(map:space2Tile(cc.p(x - 32, posY - 32)))
-            local flag_y = map:isBlock(map:space2Tile(cc.p(posX - 32, y - 32)))
+            local flag_x = map:isBlock(map:space2Tile(cc.p(x - radius, posY - radius)))
+            local flag_y = map:isBlock(map:space2Tile(cc.p(posX - radius, y - radius)))
             if flag_x and flag_y then 
                 return
             elseif flag_x and not flag_y then
@@ -210,8 +349,8 @@ function SpriteRole:move(angle, direct, power)
                 return
             end
         elseif 4 == idx then
-            local flag_x = map:isBlock(map:space2Tile(cc.p(x + 32, posY - 32)))
-            local flag_y = map:isBlock(map:space2Tile(cc.p(posX + 32, y - 32)))
+            local flag_x = map:isBlock(map:space2Tile(cc.p(x + radius, posY - radius)))
+            local flag_y = map:isBlock(map:space2Tile(cc.p(posX + radius, y - radius)))
             if flag_x and flag_y then 
                 return
             elseif flag_x and not flag_y then
@@ -345,7 +484,6 @@ function SpriteRole:attack()
     self:setRotation(270 - angle)
 
     self:displayAttack()
-
 end
 
 function SpriteRole:setTargetList(list)
@@ -359,6 +497,31 @@ end
 --击飞strikeFly
 function SpriteRole:strikeFly(data)
     self.strikeFlyInfo = data
+end
+
+function SpriteRole:getNearTile()
+    local tileList = {}
+    local x, y = self:getPosition()
+    local map = self.gameLayer.mainMap
+    local radius = self.hurtRadius
+    tileList[1] = map:space2Tile(cc.p(x + radius, y + radius)) --分别对应 ↗ ↖ ↙ ↘  四个tile
+    tileList[2] = map:space2Tile(cc.p(x - radius, y + radius))
+    tileList[3] = map:space2Tile(cc.p(x - radius, y - radius))
+    tileList[4] = map:space2Tile(cc.p(x + radius, y - radius))
+    tileList[5] = map:space2Tile(cc.p(x + radius, y))     
+    tileList[6] = map:space2Tile(cc.p(x, y + radius))
+    tileList[7] = map:space2Tile(cc.p(x - radius, y))
+    tileList[8] = map:space2Tile(cc.p(x, y - radius))
+
+    return tileList
+end
+
+function SpriteRole:inMapRange(pos)
+    local mapSize = self.gameLayer.mapSize
+    local radius = self.hurtRadius
+    local rect = cc.rect(radius, radius, mapSize.width - radius, mapSize.height - radius)
+
+    return cc.rectContainsPoint(rect, pos)
 end
 
 

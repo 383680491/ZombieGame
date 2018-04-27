@@ -78,7 +78,7 @@ local function main()
         glView = cc.GLViewImpl:create("myWork")
         director:setOpenGLView(glView)
     end
-
+print('lua_version' .. _VERSION)
     director:setOpenGLView(glView)
     glView:setDesignResolutionSize(1280, 720, cc.ResolutionPolicy.NO_BORDER )
     director:setDisplayStats(true)

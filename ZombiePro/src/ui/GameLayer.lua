@@ -88,14 +88,6 @@ function GameLayer:init()
     --self:updateBattleFog();
     self:registerTouch()
     self:registerKey()
-
-    local SpriteMine = require 'ui.widget.SpriteMine'
-    local mine = SpriteMine:new()
-    mine:setGameLayer(self)
-    mine:setPosition(cc.p(900, 650))
-    self.mainMap:addChild(mine)
-    table.insert(self.mineList, mine)
-
 end
 
 function GameLayer:initJoy()
@@ -220,6 +212,10 @@ function GameLayer:attack()
     self.mainRole:attack()
 end
 
+
+function GameLayer:makeMine()
+    self.mainRole:makeMine()
+end
 
 
 

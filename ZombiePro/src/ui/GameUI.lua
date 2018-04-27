@@ -59,6 +59,7 @@ end
 function GameUI:btnCallback(tag)
     look(tag, 'tag')
     if tag == TAG_1 then 
+        self.gameLayer:makeMine()
     elseif tag == TAG_2 then
 
     elseif tag == TAG_3 then

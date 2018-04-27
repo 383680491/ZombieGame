@@ -1,4 +1,14 @@
 local t = {
+
+    STATUS_LIVING = 1,
+    STATUS_DEAD = 2,
+
+
+
+
+
+
+
 	DIR_RIGHT = 0,
 	DIR_RIGHT_UP = 1,
 	DIR_UP = 2,

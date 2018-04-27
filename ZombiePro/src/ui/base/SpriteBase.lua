@@ -18,6 +18,7 @@ function SpriteBase:ctor()
     self.attackRadius = 100  --攻击范围
     self.warningRadiis = -1  --警戒范围   （-1是全屏 这个参数应该只有怪物会用到，在警戒范围内，会寻找目标攻击）
     self.buffList = {}
+    self.lifeStatus = G_Def.STATUS_LIVING
 
     self.hp = 5
 end
@@ -57,6 +58,14 @@ function SpriteBase:addBuff(id)
     else
         self.buffList[id]:reset()
     end
+end
+
+function SpriteBase:getLifeStatus()
+    return self.lifeStatus
+end
+
+function SpriteBase:setLifeStatus(status)
+    self.lifeStatus = status
 end
 
 
