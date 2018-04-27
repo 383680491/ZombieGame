@@ -29,7 +29,6 @@ function GameLayer:init()
     self.mineList = {};
     self.roleList = {};
     self.monsterList = {}
-
     self.heroAnchor = cc.p(self.winSize.width / 2 - 80, self.winSize.height / 2)    --主角走到屏幕的该点后地图就开始跟随
 
     self.bottomLayer = cc.Node:create();                         --底层
@@ -56,6 +55,7 @@ function GameLayer:init()
 
     local GameMap = require 'ui.GameMap'
     self.mainMap = GameMap:new()
+    self.mainMap:setPosition(cc.p(0, 0))
     self.mainMap:loadMapNew('tileMap/map_1.tmx', 1001, cc.p(0, 0))
     self.mainLayer:addChild(self.mainMap, 5000, 5000);
 
@@ -84,6 +84,7 @@ function GameLayer:init()
 
     self.mapSize = cc.size(self.mainMap:getMapSize().width * self.mainMap:getTileSize().width,
         self.mainMap:getMapSize().height * self.mainMap:getTileSize().height);
+look(self.mapSize, 'self.mapSize===')
     self:scheduleUpdate();
     --self:updateBattleFog();
     self:registerTouch()
@@ -129,14 +130,14 @@ function GameLayer:getBombList()
 end
 
 function GameLayer:update(dt)
-    self:setMapScrollPosition(dt);
+    --self:setMapScrollPosition(dt);
     self:dealCollision()
     self:deleteMine()
     --self:updateBattleFog();
 end
 
 function GameLayer:setMapScrollPosition(dt)
-    local heroPosX, heroPosY = self.mainRole:getPositionX(), self.mainRole:getPositionY();
+    local heroPosX, heroPosY = self.mainRole:getPosition()
     local x = math.max(heroPosX, self.heroAnchor.x);
     local y = math.max(heroPosY, self.heroAnchor.y);
 
@@ -145,7 +146,6 @@ function GameLayer:setMapScrollPosition(dt)
 
     local viewPointX = self.heroAnchor.x - x;
     local viewPointY = self.heroAnchor.y - y;
-
     self.mainLayer:setPosition(viewPointX, viewPointY);
 end
 

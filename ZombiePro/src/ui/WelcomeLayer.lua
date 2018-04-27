@@ -17,9 +17,6 @@ end
 
 function Welcomelayer:ctor()
     Welcomelayer.super:ctor()
-    self.visibleSize = cc.Director:getInstance():getVisibleSize()
-    self.origin = cc.Director:getInstance():getVisibleOrigin()
-    self.schedulerID = nil
     self:setMoudleId(G_LayerDefine.LOGIN_TEST)
 end
 
@@ -29,6 +26,7 @@ function Welcomelayer:init()
 
     local GameLayer = require 'ui.GameLayer'
     local layer = GameLayer:create()
+    layer:setPosition(cc.p(0, 0))
     self:addChild(layer)
 
     -- local JoyStick = require 'utils.JoyStick'

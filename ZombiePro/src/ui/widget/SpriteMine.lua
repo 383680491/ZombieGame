@@ -9,7 +9,7 @@ local STATUS_OVER = 5
 
 local Strike_Time = 0.1   --击飞时间持续
 local Strike_Len = 50     --击飞距离为
-local ReadyTime = 3     --STATUS_Born到STATUS_Ready的时间,如果人物在埋雷后这段时间没有离开 就会被炸
+local ReadyTime = 2     --STATUS_Born到STATUS_Ready的时间,如果人物在埋雷后这段时间没有离开 就会被炸
 
 function SpriteMine:ctor(...)
     local args = {...}

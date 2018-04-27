@@ -1,5 +1,5 @@
 local SpriteRole = class('SpriteRole', require 'ui.base.SpriteBase')
-local MineWasteTime = 5   --制造雷需要的时间
+local MineWasteTime = 2   --制造雷需要的时间
 local HelpStayTime = 0.3   --在死亡玩家旁边呆足这段时间才开始治疗
 local HelpDuringTime = 5   --治疗玩家所需要的时间
 
@@ -76,10 +76,11 @@ function SpriteRole:makeMine()
         return
     end
 
+    local x, y = self:getPosition()
     local time = MineWasteTime
     self.mineNode = cc.Node:create()
-    self:addChild(self.mineNode)
-    self.mineNode:setPosition(cc.p(0, self.hurtRadius + 20))
+    self.gameLayer.mainMap:addChild(self.mineNode)
+    self.mineNode:setPosition(cc.p(x, self.hurtRadius + y + 20))
 
     local to = cc.ProgressTo:create(time, 100)
     local spr = cc.ProgressTimer:create(cc.Sprite:create('progress.png'))
@@ -133,10 +134,12 @@ function SpriteRole:helpFriend()
         return
     end
 
+    local x, y = self:getPosition()
     local time = HelpDuringTime
     self.helpNode = cc.Node:create()
-    self:addChild(self.helpNode)
-    self.helpNode:setPosition(cc.p(0, self.hurtRadius + 20))
+    self.gameLayer.mainMap:addChild(self.helpNode)
+    self.helpNode:setPosition(cc.p(x, self.hurtRadius + y + 20))
+
 
     local to = cc.ProgressTo:create(time, 100)
     local spr = cc.ProgressTimer:create(cc.Sprite:create('progress.png'))
@@ -199,7 +202,7 @@ function SpriteRole:update(dt)
             return
         end
 
-        local tileList = self:getNearTile()
+        local tileList = self:getNearTile(cc.p(x, y))
         local isBlock = false
 
         for idx, tile in ipairs(tileList) do
@@ -265,17 +268,19 @@ function SpriteRole:move(angle, direct, power)
     end
     
 
-    if not self:inMapRange(cc.p(x, y)) then 
-        return
-    end
+    -- if not self:inMapRange(cc.p(x, y)) then 
+    --     return
+    -- end
 
     local map = self.gameLayer.mainMap
-    local tileList = self:getNearTile()
+    local tileList = self:getNearTile(cc.p(x, y))
     local flagList = {}
 
     for idx, tile in ipairs(tileList) do   --如果直接判断有block就return 会感觉人物黏在墙上移不动 摇杆失效的感觉 
         flagList[idx] = map:isBlock(tile)
     end
+
+    local mapSize = self.gameLayer.mapSize
 
     --判断 为true有多少个
     local count = 0
@@ -295,7 +300,11 @@ function SpriteRole:move(angle, direct, power)
         (flagList[4] and flagList[5] and 2 == count) or
         (flagList[2] and flagList[7] and 2 == count) or
         (flagList[3] and flagList[7] and 2 == count) then
-        self:setPositionY(y) 
+
+        if y >= self.hurtRadius and y <= mapSize.height - self.hurtRadius then 
+            self:setPositionY(y) 
+        end
+
         return
     elseif (flagList[1] and flagList[2] and flagList[6]) or   --代表上下两边的完全没法通行 则X轴可以同行
         (flagList[3] and flagList[4] and flagList[8]) or
@@ -303,7 +312,11 @@ function SpriteRole:move(angle, direct, power)
         (flagList[2] and flagList[6] and 2 == count) or
         (flagList[3] and flagList[8] and 2 == count) or
         (flagList[4] and flagList[8] and 2 == count) then
-        self:setPositionX(x) 
+
+        if x >= self.hurtRadius and x <= mapSize.width - self.hurtRadius then 
+            self:setPositionX(x) 
+        end
+
         return
     end
 
@@ -318,10 +331,15 @@ function SpriteRole:move(angle, direct, power)
             if flag_x and flag_y then 
                 return
             elseif flag_x and not flag_y then
-                self:setPositionY(y)
+                if y >= self.hurtRadius and y <= mapSize.height - self.hurtRadius then 
+                    self:setPositionY(y) 
+                end
                 return
             elseif not flag_x and flag_y then
-                self:setPositionX(x) 
+                if x >= self.hurtRadius and x <= mapSize.width - self.hurtRadius then 
+                    self:setPositionX(x) 
+                end
+
                 return
             end
         elseif 2 == idx then
@@ -330,10 +348,15 @@ function SpriteRole:move(angle, direct, power)
             if flag_x and flag_y then 
                 return
             elseif flag_x and not flag_y then
-                self:setPositionY(y)
+                if y >= self.hurtRadius and y <= mapSize.height - self.hurtRadius then 
+                    self:setPositionY(y) 
+                end
                 return
             elseif not flag_x and flag_y then
-                self:setPositionX(x) 
+                if x >= self.hurtRadius and x <= mapSize.width - self.hurtRadius then 
+                    self:setPositionX(x) 
+                end
+                
                 return
             end
         elseif 3 == idx then
@@ -342,10 +365,14 @@ function SpriteRole:move(angle, direct, power)
             if flag_x and flag_y then 
                 return
             elseif flag_x and not flag_y then
-                self:setPositionY(y)
+                if y >= self.hurtRadius and y <= mapSize.height - self.hurtRadius then 
+                    self:setPositionY(y) 
+                end
                 return
             elseif not flag_x and flag_y then
-                self:setPositionX(x) 
+                if x >= self.hurtRadius and x <= mapSize.width - self.hurtRadius then 
+                    self:setPositionX(x) 
+                end
                 return
             end
         elseif 4 == idx then
@@ -354,10 +381,14 @@ function SpriteRole:move(angle, direct, power)
             if flag_x and flag_y then 
                 return
             elseif flag_x and not flag_y then
-                self:setPositionY(y)
+                if y >= self.hurtRadius and y <= mapSize.height - self.hurtRadius then 
+                    self:setPositionY(y) 
+                end
                 return
             elseif not flag_x and flag_y then
-                self:setPositionX(x) 
+                if x >= self.hurtRadius and x <= mapSize.width - self.hurtRadius then 
+                    self:setPositionX(x) 
+                end
                 return
             end
         end
@@ -499,9 +530,9 @@ function SpriteRole:strikeFly(data)
     self.strikeFlyInfo = data
 end
 
-function SpriteRole:getNearTile()
+function SpriteRole:getNearTile(pos)
     local tileList = {}
-    local x, y = self:getPosition()
+    local x, y = pos.x, pos.y
     local map = self.gameLayer.mainMap
     local radius = self.hurtRadius
     tileList[1] = map:space2Tile(cc.p(x + radius, y + radius)) --分别对应 ↗ ↖ ↙ ↘  四个tile
