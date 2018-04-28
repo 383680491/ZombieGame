@@ -77,8 +77,21 @@ function SpriteMonster:update(dt)
         local posX, posY = self:getPosition()
         local x = self.strikeFlyInfo.dirAtor.x + posX
         local y = self.strikeFlyInfo.dirAtor.y + posY
-        local tile = self.gameLayer.mainMap:space2Tile(cc.p(x, y))
-        local isBlock = self.gameLayer.mainMap:isBlock(tile)
+
+        if not self:inMapRange(cc.p(x, y)) then 
+            self.strikeFlyInfo = nil
+            return
+        end
+
+        local tileList = self:getNearTile(cc.p(x, y))
+        local isBlock = false
+
+        for idx, tile in ipairs(tileList) do
+            isBlock = self.gameLayer.mainMap:isBlock(tile)
+            if isBlock then 
+                break
+            end
+        end
 
         if isBlock then 
             self.strikeFlyInfo = nil

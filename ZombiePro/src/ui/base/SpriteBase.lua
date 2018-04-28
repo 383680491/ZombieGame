@@ -68,6 +68,32 @@ function SpriteBase:setLifeStatus(status)
     self.lifeStatus = status
 end
 
+function SpriteBase:getNearTile(pos)
+    local tileList = {}
+    local x, y = pos.x, pos.y
+    local map = self.gameLayer.mainMap
+    local radius = self.hurtRadius
+    tileList[1] = map:space2Tile(cc.p(x + radius, y + radius)) --分别对应 ↗ ↖ ↙ ↘  四个tile
+    tileList[2] = map:space2Tile(cc.p(x - radius, y + radius))
+    tileList[3] = map:space2Tile(cc.p(x - radius, y - radius))
+    tileList[4] = map:space2Tile(cc.p(x + radius, y - radius))
+    tileList[5] = map:space2Tile(cc.p(x + radius, y))     
+    tileList[6] = map:space2Tile(cc.p(x, y + radius))
+    tileList[7] = map:space2Tile(cc.p(x - radius, y))
+    tileList[8] = map:space2Tile(cc.p(x, y - radius))
+
+    return tileList
+end
+
+function SpriteBase:inMapRange(pos)
+    local mapSize = self.gameLayer.mapSize
+    local radius = self.hurtRadius
+    local rect = cc.rect(radius, radius, mapSize.width - radius, mapSize.height - radius)
+
+    return cc.rectContainsPoint(rect, pos)
+end
+
+
 
 --下面这三个函数是针对三转二来的 比如孤胆枪手    不要删除
 function SpriteBase:runAnimal()   

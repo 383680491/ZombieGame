@@ -266,11 +266,6 @@ function SpriteRole:move(angle, direct, power)
         self.helpNode = nil
         self.helpStatus = STATUS_HELP_NULL
     end
-    
-
-    -- if not self:inMapRange(cc.p(x, y)) then 
-    --     return
-    -- end
 
     local map = self.gameLayer.mainMap
     local tileList = self:getNearTile(cc.p(x, y))
@@ -529,31 +524,5 @@ end
 function SpriteRole:strikeFly(data)
     self.strikeFlyInfo = data
 end
-
-function SpriteRole:getNearTile(pos)
-    local tileList = {}
-    local x, y = pos.x, pos.y
-    local map = self.gameLayer.mainMap
-    local radius = self.hurtRadius
-    tileList[1] = map:space2Tile(cc.p(x + radius, y + radius)) --分别对应 ↗ ↖ ↙ ↘  四个tile
-    tileList[2] = map:space2Tile(cc.p(x - radius, y + radius))
-    tileList[3] = map:space2Tile(cc.p(x - radius, y - radius))
-    tileList[4] = map:space2Tile(cc.p(x + radius, y - radius))
-    tileList[5] = map:space2Tile(cc.p(x + radius, y))     
-    tileList[6] = map:space2Tile(cc.p(x, y + radius))
-    tileList[7] = map:space2Tile(cc.p(x - radius, y))
-    tileList[8] = map:space2Tile(cc.p(x, y - radius))
-
-    return tileList
-end
-
-function SpriteRole:inMapRange(pos)
-    local mapSize = self.gameLayer.mapSize
-    local radius = self.hurtRadius
-    local rect = cc.rect(radius, radius, mapSize.width - radius, mapSize.height - radius)
-
-    return cc.rectContainsPoint(rect, pos)
-end
-
 
 return SpriteRole
