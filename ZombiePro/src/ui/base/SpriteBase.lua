@@ -2,10 +2,7 @@ local NodeBuff = require 'ui.widget.NodeBuff'
 local SpriteBase = class('SpriteBase', NodeAStar) --NodeAStar
 
 function SpriteBase:ctor()
-    --self.mainSprite = cc.Sprite:create()
-    self.mainSprite = ccui.ImageView:create()
-    self:addChild(self.mainSprite)
-
+    self.mainSprite = nil
     self.dir = G_Def.DIR_UP
     self.torwardId = G_Def.DIR_RIGHT
     self.action = G_Def.ACTION_STAND
@@ -48,7 +45,9 @@ function SpriteBase:drawRect()
 end
 
 function SpriteBase:hurt(harmValue, buffId)
-    self:addBuff(buffId)
+    if buffId then 
+        self:addBuff(buffId)
+    end
 end
 
 function SpriteBase:addBuff(id)

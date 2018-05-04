@@ -4,6 +4,7 @@ local SpriteMonster = class('SpriteMonster', require 'ui.base.SpriteBase')
 local FindPath_NeedLen = 3   --当A*算法路径低于n个时 则开始判断是否切换状态
 local FindPath_Star = 1
 local FindPath_Lock = 2
+local AttackTimeCD = 0.5
 
 function SpriteMonster:ctor(...)
     SpriteMonster.super.ctor(self)
@@ -20,8 +21,12 @@ function SpriteMonster:ctor(...)
 
     --self:getTorwardIDByDir()
     --self:runAnimal()
-    self.mainSprite:loadTexture('monster.png')
+    self.mainSprite = ccui.ImageView:create('monster.png')
     self.mainSprite:setScale(0.5)
+    self.mainNode = cc.Node:create()
+    self.mainNode:addChild(self.mainSprite)
+    self:addChild(self.mainNode)
+
     self:scheduleUpdate();
 
     self.status = 'stand'
@@ -29,6 +34,8 @@ function SpriteMonster:ctor(...)
     self.halfSecond = 0
     self.canInitPath = false
     self.findPathStatus = FindPath_Star
+    self.attackTimeCD = 0
+    self.attackRadius = 50  --攻击范围
     if DEBUG_MOD then 
         self:drawRect()
     end
@@ -108,6 +115,12 @@ function SpriteMonster:update(dt)
 
         if self.curDestTile.x == -1 and self.curDestTile.y == -1 then 
             self.status = 'attack'
+            return
+        end
+
+        if self:isAttack() then 
+            self.status = 'attack'
+            self.attackTimeCD = 0
             return
         end
 
@@ -200,10 +213,16 @@ function SpriteMonster:update(dt)
 
         local radian = cc.pToAngleSelf(self.dirAtor)
         local angle = radian / 3.14159 * 180 --弧度变角度 
-        self:setRotation(270 - angle)
+        self.mainNode:setRotation(270 - angle)
 
         self.status = 'run'
     elseif self.status == 'run' then
+        if self:isAttack() then 
+            self.status = 'attack'
+            self.attackTimeCD = 0
+            return
+        end
+
         local posX, posY = self:getPosition()
         local x = speed * self.dirAtor.x + posX
         local y = speed * self.dirAtor.y + posY
@@ -217,7 +236,44 @@ function SpriteMonster:update(dt)
                 self.status = 'stand'
             end
         end
+    elseif self.status == 'attack' then
+        if not self:isAttack() then 
+            self.status = 'stand'
+            return
+        end
+
+        if self.attackTimeCD == 0 then 
+            --attack
+            local x, y = self:getPosition()
+            local tx, ty = self.gameLayer.mainRole:getPosition()
+            local dir = G_Utils.getDirVector(cc.p(x, y), cc.p(tx, ty))
+            local radian = cc.pToAngleSelf(dir)
+            local angle = radian / 3.14159 * 180 --弧度变角度 
+            self.mainNode:setRotation(270 - angle)   --重新确定方向
+
+
+            dir = cc.pMul(dir, 10)
+            local targetPos = cc.pAdd(cc.p(x, y), dir)
+
+            local action = cc.MoveTo:create(0.1, targetPos)
+            local revAction = cc.MoveTo:create(0.1, cc.p(x, y))
+            self:runAction(cc.Sequence:create(action, cc.CallFunc:create(function() 
+                look('monster  attack')
+                self.gameLayer.mainRole:hurt(20, nil, self)
+            end), revAction))  
+
+            self.attackTimeCD = self.attackTimeCD + dt
+        elseif self.attackTimeCD >= AttackTimeCD then
+            self.attackTimeCD = 0
+        else
+            self.attackTimeCD = self.attackTimeCD + dt
+        end
     end
+
+
+
+
+
 
     if self.second >= 1 then 
         self.second = 0
@@ -226,6 +282,12 @@ function SpriteMonster:update(dt)
             self.canInitPath = true
         end
     end
+
+
+
+
+
+
 
     if self.halfSecond >= 0.3 then 
         self.halfSecond = 0.3
@@ -248,13 +310,19 @@ function SpriteMonster:update(dt)
             self.dirAtor = G_Utils.getDirVector(curPos, curDestPos)
             local radian = cc.pToAngleSelf(self.dirAtor)
             local angle = radian / 3.14159 * 180 --弧度变角度 
-            self:setRotation(270 - angle)
+            self.mainNode:setRotation(270 - angle)
         end
     end
 end
 --击飞strikeFly
 function SpriteMonster:strikeFly(data)
     self.strikeFlyInfo = data
+end
+
+function SpriteMonster:isAttack()
+    local heroX, heroY = self.gameLayer.mainRole:getPosition()
+    local posX, posY = self:getPosition()
+    return cc.pGetDistance(cc.p(heroX, heroY), cc.p(posX, posY)) < self.attackRadius + self.gameLayer.mainRole.hurtRadius
 end
 
 return SpriteMonster

@@ -56,7 +56,7 @@ function GameLayer:init()
     local GameMap = require 'ui.GameMap'
     self.mainMap = GameMap:new()
     self.mainMap:setPosition(cc.p(0, 0))
-    self.mainMap:loadMapNew('tileMap/map_1.tmx', 1001, cc.p(0, 0))
+    self.mainMap:load('tileMap/map_1.tmx')
     self.mainLayer:addChild(self.mainMap, 5000, 5000);
 
     local spriteFrameCache = cc.SpriteFrameCache:getInstance()

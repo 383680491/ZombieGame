@@ -3,6 +3,9 @@ local MineWasteTime = 2   --制造雷需要的时间
 local HelpStayTime = 0.3   --在死亡玩家旁边呆足这段时间才开始治疗
 local HelpDuringTime = 5   --治疗玩家所需要的时间
 
+local ShieldAnimalLen = 5   --收到攻击后盾相对动画移动的长度
+local ShieldTimeCD = 0.3
+
 local STATUS_HELP_NULL = 1 
 local STATUS_HELP_STAY = 2 
 local STATUS_HELP = 3
@@ -36,7 +39,10 @@ function SpriteRole:ctor(...)
 
 --    self:getTorwardIDByDir()
 --    self:runAnimal()
-    self.mainSprite:loadTexture('hero.png')
+    self.mainSprite = ccui.ImageView:create('hero.png')
+    self.mainNode = cc.Node:create()       --角度改变的节点
+    self.mainNode:addChild(self.mainSprite)
+    self:addChild(self.mainNode)
 
     --简单选定，仅仅只是判断距离不考虑其他因素
     self.targetList = {}
@@ -60,6 +66,8 @@ function SpriteRole:ctor(...)
 
     self.helpStatus = STATUS_HELP_NULL
     self.helpStayTime = saveStayTime
+    self.heroStaus = 'defense'
+    self.shieldTimeCD = 0
 end
 
 function SpriteRole:scheduleUpdate()
@@ -69,6 +77,56 @@ function SpriteRole:scheduleUpdate()
 
     self:scheduleUpdateWithPriorityLua(update, 0);
 end
+
+
+
+function SpriteRole:attack()
+    local selectList = {}
+    local posX, posY = self:getPosition()
+
+    --是否有墙
+    for _, target in ipairs(self.targetList) do 
+        local x, y = target:getPosition()    
+        if not self.gameLayer.mainMap:pathHasBlock(cc.p(posX, posY), cc.p(x, y)) then  
+            table.insert(selectList, target)
+        end
+    end
+
+    if #selectList <= 0 then 
+        self.lock = false
+        self.curSelectTargetList = {}
+        return
+    end
+
+    --按照距离排序，可能需要获得前几个 不一定只有一个
+    table.sort(selectList, function(A, B) 
+        local AX, AY = A:getPosition() 
+        local BX, BY = B:getPosition() 
+        local ALen = cc.pGetDistance(cc.p(posX, posY), cc.p(AX, AY))
+        local BLen = cc.pGetDistance(cc.p(posX, posY), cc.p(BX, BY))
+
+        return ALen < BLen
+    end)
+
+    self.curSelectTargetList = {}
+    for i = 1, self.gunConfig.targetCount do 
+        if selectList[i] then 
+            self.curSelectTargetList[i] = selectList[i]
+        end
+    end
+
+    self.lock = true
+
+    --直接先改变一次方向 锁定就立刻对准目标
+    local dir = self:getDirByTarget()
+    local radian = cc.pToAngleSelf(dir)
+    local angle = radian / 3.14159 * 180 --弧度变角度 
+    self.mainNode:setRotation(270 - angle)
+
+    self:displayAttack()
+end
+
+
 
 --
 function SpriteRole:makeMine()
@@ -103,6 +161,21 @@ function SpriteRole:makeMine()
      end)))
 end
 
+function SpriteRole:makeDefense()
+    if not self.spriteShield then 
+        self.spriteShield = cc.Sprite:create()
+        self.mainNode:addChild(self.spriteShield)
+    end
+
+    self.heroStaus = 'defense'
+    self.lock = false
+    self.shieldTimeCD = 0
+end 
+
+
+
+
+
 function SpriteRole:judgeHelpFriend(dt)
     if self.helpStatus == STATUS_HELP_NULL then 
         for _,role in ipairs(self.gameLayer.roleList) do 
@@ -127,7 +200,6 @@ function SpriteRole:judgeHelpFriend(dt)
         self.helpStatus = STATUS_HELPING
     end
 end
-
 
 function SpriteRole:helpFriend()
     if self.helpNode then 
@@ -220,6 +292,10 @@ function SpriteRole:update(dt)
         end
 
         return
+    end
+
+    if self.heroStaus == 'defense' and self.shieldTimeCD > 0 then 
+        self.shieldTimeCD = self.shieldTimeCD - dt
     end
 end
 
@@ -400,10 +476,10 @@ function SpriteRole:move(angle, direct, power)
         if dir then 
             local radian = cc.pToAngleSelf(dir)
             local angle = radian / 3.14159 * 180 --弧度变角度 
-            self:setRotation(270 - angle)
+            self.mainNode:setRotation(270 - angle)
         end
     else
-        self:setRotation(270 - angle)  -- 180 - angle + 90    角度是逆时针向上旋转  而setRotation顺时针向下旋转 所以先减了180 至于加90
+        self.mainNode:setRotation(270 - angle)  -- 180 - angle + 90    角度是逆时针向上旋转  而setRotation顺时针向下旋转 所以先减了180 至于加90
     end                                --是因为游戏美术出图就是向下了90度
 end
 
@@ -466,52 +542,6 @@ function SpriteRole:displayAttack()
     end
 end
 
-function SpriteRole:attack()
-    local selectList = {}
-    local posX, posY = self:getPosition()
-
-    --是否有墙
-    for _, target in ipairs(self.targetList) do 
-        local x, y = target:getPosition()    
-        if not self.gameLayer.mainMap:pathHasBlock(cc.p(posX, posY), cc.p(x, y)) then  
-            table.insert(selectList, target)
-        end
-    end
-
-    if #selectList <= 0 then 
-        self.lock = false
-        self.curSelectTargetList = {}
-        return
-    end
-
-    --按照距离排序，可能需要获得前几个 不一定只有一个
-    table.sort(selectList, function(A, B) 
-        local AX, AY = A:getPosition() 
-        local BX, BY = B:getPosition() 
-        local ALen = cc.pGetDistance(cc.p(posX, posY), cc.p(AX, AY))
-        local BLen = cc.pGetDistance(cc.p(posX, posY), cc.p(BX, BY))
-
-        return ALen < BLen
-    end)
-
-    self.curSelectTargetList = {}
-    for i = 1, self.gunConfig.targetCount do 
-        if selectList[i] then 
-            self.curSelectTargetList[i] = selectList[i]
-        end
-    end
-
-    self.lock = true
-
-    --直接先改变一次方向 锁定就立刻对准目标
-    local dir = self:getDirByTarget()
-    local radian = cc.pToAngleSelf(dir)
-    local angle = radian / 3.14159 * 180 --弧度变角度 
-    self:setRotation(270 - angle)
-
-    self:displayAttack()
-end
-
 function SpriteRole:setTargetList(list)
     if #list <= 0 then 
         self.curSelectTargetList = {}
@@ -523,6 +553,48 @@ end
 --击飞strikeFly
 function SpriteRole:strikeFly(data)
     self.strikeFlyInfo = data
+end
+
+function SpriteRole:hurt(harmValue, buffId, attackObj)
+    SpriteRole.super.hurt(self, harmValue, buffId)
+
+    if self.heroStaus == 'defense' then 
+        if self.shieldTimeCD <= 0 then 
+            local x, y = self:getPosition()
+            if attackObj then 
+                -- local tx, ty = attackObj:getPosition()
+                -- local dir = G_Utils.getDirVector(cc.p(x, y), cc.p(tx, ty))
+
+                -- x, y = self.spriteShield:getPosition()
+                -- dir = cc.pMul(dir, ShieldAnimalLen)
+                -- local targetPos = cc.pAdd(cc.p(x, y), dir)
+
+                -- local action = cc.MoveTo:create(0.1, targetPos)
+                -- local revAction = cc.MoveTo:create(0.1, cc.p(x, y))
+                -- self.spriteShield:runAction(cc.Sequence:create(action, revAction))                 --盾牌收到伤害的动画
+                look('抵挡了~~~')
+            end
+
+            self.shieldTimeCD = ShieldTimeCD
+        else
+            --计算伤害
+            look('啊！')
+            local pos = cc.p(0, 30)
+            local label = cc.Label:create()
+            label:setString('啊')
+            label:setScale(0.5)
+            label:setPosition(pos)
+            self:addChild(label)
+
+            label:runAction(cc.Sequence:create(
+                cc.Spawn:create(
+                    cc.MoveTo:create(0.5, cc.p(0, 50)),
+                    cc.ScaleTo:create(0.5, 1)
+                ),
+                cc.CallFunc:create(function(pender)  pender:removeFromParent() end)
+            ))
+        end
+    end
 end
 
 return SpriteRole
