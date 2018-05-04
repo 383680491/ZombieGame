@@ -16,7 +16,7 @@ public:
 
 	inline void setMap(MapView* map){ m_pMap = map; }
 	void createPath();
-	void findPath(Point desPoint);
+	void findPath(cocos2d::Point desPoint);
 	int getPathCount();
 	_AstarNode* getPathNode();
 	void deleteDoneNode();
@@ -26,6 +26,6 @@ private:
 	MapView* m_pMap;
 	struct _AstarNode *AStarMap;
 	struct _AstarNode *AStarPath;
-	Point LastDestPoint;
+	cocos2d::Point LastDestPoint;
 };
 #endif

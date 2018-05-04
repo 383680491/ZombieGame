@@ -20,6 +20,8 @@
 #include "runtime/ConfigParser.h"
 #include "runtime/FileServer.h"
 
+extern std::string g_projectPath; // Runtime.cpp
+
 USING_NS_CC;
 using namespace std;
 

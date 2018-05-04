@@ -3,10 +3,7 @@
 #include "SimpleAudioEngine.h"
 #include "cocos2d.h"
 #include "lua_module_register.h"
-#include "tolua/LuaProxy.h"
-#include "bridge/Channel.h"
-#include "hotUpdate/lua_hot_update_sdk.h"
-#include "utils/cforLua.h"
+#include "mapView/lua_map_view.h"
 
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_LINUX)
 #include "ide-support/CodeIDESupport.h"
@@ -16,14 +13,6 @@
 #include "runtime/Runtime.h"
 #include "ide-support/RuntimeLuaImpl.h"
 #endif
-
-
-
-#include "mapview/MapView.h"
-
-
-
-
 
 using namespace CocosDenshion;
 
@@ -73,12 +62,9 @@ bool AppDelegate::applicationDidFinishLaunching()
     ScriptEngineManager::getInstance()->setScriptEngine(engine);
     lua_State* L = engine->getLuaStack()->getLuaState();
     lua_module_register(L);
-	lua_LuaProxy(L);
-	Channel::getInstance()->register_lua(L);
-	register_all_hot_update(L);
-	CFORLUA::getInstance()->register_lua(L);
-
     register_all_packages();
+	register_all_map_view(L);
+
 
     LuaStack* stack = engine->getLuaStack();
     stack->setXXTEAKeyAndSign("2dxLua", strlen("2dxLua"), "XXTEA", strlen("XXTEA"));
@@ -98,6 +84,32 @@ bool AppDelegate::applicationDidFinishLaunching()
         return false;
     }
 #endif
+
+
+
+
+/*	auto scene = Scene::create();
+	if (Director::getInstance()->getRunningScene() == NULL)
+	{
+		Director::getInstance()->runWithScene(scene);
+	}
+
+	auto spr = Sprite::create("res/HelloWorld.png");
+	scene->addChild(spr);
+
+
+	auto map = MapView::create("res/tileMap/map_1.tmx");
+	scene->addChild(map);
+	*/
+
+
+
+
+
+
+
+
+
 
     return true;
 }
