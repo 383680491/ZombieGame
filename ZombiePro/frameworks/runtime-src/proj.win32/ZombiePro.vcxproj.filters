@@ -10,32 +10,8 @@
     <Filter Include="resource">
       <UniqueIdentifier>{2d1d0979-58cd-4ab6-b91c-13650158f1fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\common">
-      <UniqueIdentifier>{b85e7d3a-28ac-4da4-960b-2aafd70fe770}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\mapview">
-      <UniqueIdentifier>{bfa62666-a821-4517-9233-acb369d30a53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\sprites">
-      <UniqueIdentifier>{6102a130-1743-4740-a920-c9fb5cd2a7fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\tolua">
-      <UniqueIdentifier>{4580a797-0d1b-4ee7-9889-e6b4ab425e89}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\MirControl">
-      <UniqueIdentifier>{a641b41c-7043-4e3e-80b3-aafdac6922aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\bridge">
-      <UniqueIdentifier>{a670b3bd-e1d2-4f8d-9363-5f0ee28eedb8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\hotUpdate">
-      <UniqueIdentifier>{6d52b478-233a-48aa-a539-b43c0bc436e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\utils">
-      <UniqueIdentifier>{49b38bc7-4e88-4753-9feb-a10818de586f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\utils\cJSON">
-      <UniqueIdentifier>{c1c8bc8e-1d99-4175-9e89-ac201b71655b}</UniqueIdentifier>
+    <Filter Include="Classes\mapView">
+      <UniqueIdentifier>{a45f9d49-402e-4bbc-b1f4-96e84cb04352}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -62,143 +38,20 @@
     <ClInclude Include="..\Classes\ide-support\RuntimeLuaImpl.h">
       <Filter>Classes</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\common\CGameFunc.h">
-      <Filter>Classes\common</Filter>
+    <ClInclude Include="..\Classes\mapView\FindPath.h">
+      <Filter>Classes\mapView</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\common\DirtyWords.h">
-      <Filter>Classes\common</Filter>
+    <ClInclude Include="..\Classes\mapView\lua_map_view.h">
+      <Filter>Classes\mapView</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\common\FontChina.h">
-      <Filter>Classes\common</Filter>
+    <ClInclude Include="..\Classes\mapView\MapView.h">
+      <Filter>Classes\mapView</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\common\MakeNumbers.h">
-      <Filter>Classes\common</Filter>
+    <ClInclude Include="..\Classes\mapView\NodeAStar.h">
+      <Filter>Classes\mapView</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\common\TypeDefine.h">
-      <Filter>Classes\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\lua_module_register.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\mapview\FindPath.h">
-      <Filter>Classes\mapview</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\mapview\MapTileNode.h">
-      <Filter>Classes\mapview</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\mapview\MapView.h">
-      <Filter>Classes\mapview</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\mapview\MapViewBase.h">
-      <Filter>Classes\mapview</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\mapview\SortNode.h">
-      <Filter>Classes\mapview</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\mapview\TileDef.h">
-      <Filter>Classes\mapview</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\tolua\lua_woool_auto.h">
-      <Filter>Classes\tolua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\tolua\lua_woool_manual.h">
-      <Filter>Classes\tolua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\tolua\LuaProxy.h">
-      <Filter>Classes\tolua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\tolua\tolua_CGameFunc.h">
-      <Filter>Classes\tolua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\tolua\tolua_DebugError.h">
-      <Filter>Classes\tolua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\tolua\tolua_ScreenRecording.h">
-      <Filter>Classes\tolua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\tolua\tolua_tersafe.h">
-      <Filter>Classes\tolua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\tolua\woool.h">
-      <Filter>Classes\tolua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\Commen_ActionToDo.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\Commen_Direction.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\GraySprite.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\HttpSprite.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\MainRoledata.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\ObjectMoveAction.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\SpriteBase.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\SpriteCharacterBase.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\SpriteMonster.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\SpriteNpc.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\SpritePlayer.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\Touch9Sprite.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\sprites\TouchSprite.h">
-      <Filter>Classes\sprites</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\MirControl\MirBatchDrawLabel.h">
-      <Filter>Classes\MirControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\MirControl\MirTextNode.h">
-      <Filter>Classes\MirControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\MirControl\MirTextNodeFormatter.h">
-      <Filter>Classes\MirControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\bridge\Channel.h">
-      <Filter>Classes\bridge</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\bridge\ChannelEmitter.h">
-      <Filter>Classes\bridge</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\bridge\ChannelEventDefine.h">
-      <Filter>Classes\bridge</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\hotUpdate\hotUpdate.h">
-      <Filter>Classes\hotUpdate</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\hotUpdate\lua_hot_update_sdk.h">
-      <Filter>Classes\hotUpdate</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\utils\cforLua.h">
-      <Filter>Classes\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\utils\md5.h">
-      <Filter>Classes\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\utils\UrlCode.h">
-      <Filter>Classes\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\utils\cJSON\cJSON.h">
-      <Filter>Classes\utils\cJSON</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\mapview\NodeAStar.h">
-      <Filter>Classes\mapview</Filter>
+    <ClInclude Include="..\Classes\mapView\TileDef.h">
+      <Filter>Classes\mapView</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -218,101 +71,17 @@
     <ClCompile Include="..\Classes\ide-support\RuntimeLuaImpl.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\common\CGameFunc.cpp">
-      <Filter>Classes\common</Filter>
+    <ClCompile Include="..\Classes\mapView\FindPath.cpp">
+      <Filter>Classes\mapView</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\common\DirtyWords.cpp">
-      <Filter>Classes\common</Filter>
+    <ClCompile Include="..\Classes\mapView\lua_map_view.cpp">
+      <Filter>Classes\mapView</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\common\FontChina.cpp">
-      <Filter>Classes\common</Filter>
+    <ClCompile Include="..\Classes\mapView\MapView.cpp">
+      <Filter>Classes\mapView</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\common\MakeNumbers.cpp">
-      <Filter>Classes\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\mapview\FindPath.cpp">
-      <Filter>Classes\mapview</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\mapview\MapTileNode.cpp">
-      <Filter>Classes\mapview</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\mapview\MapView.cpp">
-      <Filter>Classes\mapview</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\mapview\MapViewBase.cpp">
-      <Filter>Classes\mapview</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\mapview\SortNode.cpp">
-      <Filter>Classes\mapview</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\tolua\LuaProxy.cpp">
-      <Filter>Classes\tolua</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\sprites\GraySprite.cpp">
-      <Filter>Classes\sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\sprites\HttpSprite.cpp">
-      <Filter>Classes\sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\sprites\ObjectMoveAction.cpp">
-      <Filter>Classes\sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\sprites\SpriteBase.cpp">
-      <Filter>Classes\sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\sprites\SpriteCharacterBase.cpp">
-      <Filter>Classes\sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\sprites\SpriteMonster.cpp">
-      <Filter>Classes\sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\sprites\SpriteNpc.cpp">
-      <Filter>Classes\sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\sprites\SpritePlayer.cpp">
-      <Filter>Classes\sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\sprites\Touch9Sprite.cpp">
-      <Filter>Classes\sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\sprites\TouchSprite.cpp">
-      <Filter>Classes\sprites</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MirControl\MirBatchDrawLabel.cpp">
-      <Filter>Classes\MirControl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MirControl\MirTextNode.cpp">
-      <Filter>Classes\MirControl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MirControl\MirTextNodeFormatter.cpp">
-      <Filter>Classes\MirControl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\bridge\Channel.cpp">
-      <Filter>Classes\bridge</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\bridge\ChannelEmitter.cpp">
-      <Filter>Classes\bridge</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\hotUpdate\hotUpdate.cpp">
-      <Filter>Classes\hotUpdate</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\hotUpdate\lua_hot_update_sdk.cpp">
-      <Filter>Classes\hotUpdate</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\utils\cforLua.cpp">
-      <Filter>Classes\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\utils\md5.cpp">
-      <Filter>Classes\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\utils\UrlCode.cpp">
-      <Filter>Classes\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\utils\cJSON\cJSON.c">
-      <Filter>Classes\utils\cJSON</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\mapview\NodeAStar.cpp">
-      <Filter>Classes\mapview</Filter>
+    <ClCompile Include="..\Classes\mapView\NodeAStar.cpp">
+      <Filter>Classes\mapView</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
