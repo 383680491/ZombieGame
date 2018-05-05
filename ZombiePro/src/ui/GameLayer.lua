@@ -218,6 +218,19 @@ function GameLayer:makeMine()
 end
 
 
+function GameLayer:makeDefense()
+    self.mainRole:makeDefense()
+end
+
+function GameLayer:removeDefense()
+    self.mainRole:removeDefense()
+end
+
+function GameLayer:getHeroStatus()
+    return self.mainRole:getStatus()
+end
+
+
 
 
 

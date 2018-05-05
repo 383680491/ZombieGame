@@ -17,12 +17,11 @@ function SpriteMonster:ctor(...)
         [G_Def.ACTION_WALK] = 4,
     }
 
-    self.speed = 2
+    self.speed = 3.5
 
     --self:getTorwardIDByDir()
     --self:runAnimal()
     self.mainSprite = ccui.ImageView:create('monster.png')
-    self.mainSprite:setScale(0.5)
     self.mainNode = cc.Node:create()
     self.mainNode:addChild(self.mainSprite)
     self:addChild(self.mainNode)
@@ -35,7 +34,7 @@ function SpriteMonster:ctor(...)
     self.canInitPath = false
     self.findPathStatus = FindPath_Star
     self.attackTimeCD = 0
-    self.attackRadius = 50  --攻击范围
+    self.attackRadius = 60  --攻击范围
     if DEBUG_MOD then 
         self:drawRect()
     end
@@ -113,10 +112,10 @@ function SpriteMonster:update(dt)
     if self.status == 'stand' then 
         self.curDestTile = self:getPathNode()
 
-        if self.curDestTile.x == -1 and self.curDestTile.y == -1 then 
-            self.status = 'attack'
-            return
-        end
+        -- if self.curDestTile.x == -1 and self.curDestTile.y == -1 then 
+        --     self.status = 'attack'
+        --     return
+        -- end
 
         if self:isAttack() then 
             self.status = 'attack'
@@ -258,7 +257,6 @@ function SpriteMonster:update(dt)
             local action = cc.MoveTo:create(0.1, targetPos)
             local revAction = cc.MoveTo:create(0.1, cc.p(x, y))
             self:runAction(cc.Sequence:create(action, cc.CallFunc:create(function() 
-                look('monster  attack')
                 self.gameLayer.mainRole:hurt(20, nil, self)
             end), revAction))  
 

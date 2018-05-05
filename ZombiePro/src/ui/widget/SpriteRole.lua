@@ -3,7 +3,7 @@ local MineWasteTime = 2   --制造雷需要的时间
 local HelpStayTime = 0.3   --在死亡玩家旁边呆足这段时间才开始治疗
 local HelpDuringTime = 5   --治疗玩家所需要的时间
 
-local ShieldAnimalLen = 5   --收到攻击后盾相对动画移动的长度
+local ShieldAnimalLen = 10   --收到攻击后盾相对动画移动的长度
 local ShieldTimeCD = 0.3
 
 local STATUS_HELP_NULL = 1 
@@ -49,7 +49,7 @@ function SpriteRole:ctor(...)
     --刷选出肯定能攻击的，比如距离够但是墙的阻隔，或者怪物无敌 等等~~~
     self.curSelectTargetList = {}
     self.gunConfig = {
-        targetCount = 3,
+        targetCount = 1,
         harm = 3,
         frameAtor = 0.5,
     }
@@ -66,8 +66,11 @@ function SpriteRole:ctor(...)
 
     self.helpStatus = STATUS_HELP_NULL
     self.helpStayTime = saveStayTime
-    self.heroStaus = 'defense'
+    self.heroStaus = 'attack'
     self.shieldTimeCD = 0
+
+    --被攻击的时候 盾会触发一个前移然后后退的一个动画，这段时间移动的方向以该动画为主，如果玩家方向移动了，那盾动的方向就不对了
+    self.shiieldAnimalFlag = false 
 end
 
 function SpriteRole:scheduleUpdate()
@@ -163,14 +166,25 @@ end
 
 function SpriteRole:makeDefense()
     if not self.spriteShield then 
-        self.spriteShield = cc.Sprite:create()
+        self.spriteShield = cc.Sprite:create('shield.png')
         self.mainNode:addChild(self.spriteShield)
+        self.spriteShield:setPosition(cc.p(0, -40))
     end
 
     self.heroStaus = 'defense'
     self.lock = false
     self.shieldTimeCD = 0
 end 
+
+function SpriteRole:removeDefense()
+    if self.spriteShield then 
+        self.spriteShield:removeFromParent()
+        self.spriteShield = nil
+    end
+
+    self.heroStaus = 'attack'
+    self.shieldTimeCD = 0
+end  
 
 
 
@@ -478,7 +492,12 @@ function SpriteRole:move(angle, direct, power)
             local angle = radian / 3.14159 * 180 --弧度变角度 
             self.mainNode:setRotation(270 - angle)
         end
-    else
+    else 
+        --防御状态且执行盾动画过程中 方向无法改变
+        if 'defense' == self.heroStaus and self.shiieldAnimalFlag then 
+            return
+        end
+
         self.mainNode:setRotation(270 - angle)  -- 180 - angle + 90    角度是逆时针向上旋转  而setRotation顺时针向下旋转 所以先减了180 至于加90
     end                                --是因为游戏美术出图就是向下了90度
 end
@@ -561,40 +580,55 @@ function SpriteRole:hurt(harmValue, buffId, attackObj)
     if self.heroStaus == 'defense' then 
         if self.shieldTimeCD <= 0 then 
             local x, y = self:getPosition()
-            if attackObj then 
-                -- local tx, ty = attackObj:getPosition()
-                -- local dir = G_Utils.getDirVector(cc.p(x, y), cc.p(tx, ty))
+            if attackObj and self.spriteShield then 
+                local tx, ty = attackObj:getPosition()
+                local dir = G_Utils.getDirVector(cc.p(x, y), cc.p(tx, ty))
+                local radian = cc.pToAngleSelf(dir)
+                local angle = radian / 3.14159 * 180 --弧度变角度 
+                self.mainNode:setRotation(270 - angle)
 
-                -- x, y = self.spriteShield:getPosition()
-                -- dir = cc.pMul(dir, ShieldAnimalLen)
-                -- local targetPos = cc.pAdd(cc.p(x, y), dir)
+                dir = cc.p(0 - dir.x, 0 - dir.y)
+                x, y = self.spriteShield:getPosition()
+                dir = cc.pMul(dir, ShieldAnimalLen)
+                local targetPos = cc.pAdd(cc.p(x, y), dir)
 
-                -- local action = cc.MoveTo:create(0.1, targetPos)
-                -- local revAction = cc.MoveTo:create(0.1, cc.p(x, y))
-                -- self.spriteShield:runAction(cc.Sequence:create(action, revAction))                 --盾牌收到伤害的动画
-                look('抵挡了~~~')
+                self.shiieldAnimalFlag = true
+                local action = cc.MoveTo:create(0.2, targetPos)
+                local revAction = cc.MoveTo:create(0.2, cc.p(x, y))
+                self.spriteShield:runAction(cc.Sequence:create(action, revAction, cc.CallFunc:create(function() 
+                    self.shiieldAnimalFlag = false
+                end)))                 --盾牌收到伤害的动画
             end
 
             self.shieldTimeCD = ShieldTimeCD
-        else
-            --计算伤害
-            look('啊！')
-            local pos = cc.p(0, 30)
-            local label = cc.Label:create()
-            label:setString('啊')
-            label:setScale(0.5)
-            label:setPosition(pos)
-            self:addChild(label)
-
-            label:runAction(cc.Sequence:create(
-                cc.Spawn:create(
-                    cc.MoveTo:create(0.5, cc.p(0, 50)),
-                    cc.ScaleTo:create(0.5, 1)
-                ),
-                cc.CallFunc:create(function(pender)  pender:removeFromParent() end)
-            ))
+            return
         end
     end
+
+
+
+    --计算伤害
+    local pos = cc.p(0, 50)
+    local label = cc.Label:create()
+    label:setSystemFontSize(24)
+    label:setString('啊')
+    label:setScale(1)
+    label:setPosition(pos)
+    self:addChild(label)
+
+    label:runAction(cc.Sequence:create(
+        cc.Spawn:create(
+            cc.MoveTo:create(0.5, cc.p(0, 80)),
+            cc.ScaleTo:create(0.5, 2)
+        ),
+        cc.CallFunc:create(function(pender)  pender:removeFromParent() end)
+    ))
 end
+
+--获得英雄状态
+function SpriteRole:getStatus()
+    return self.heroStaus
+end
+
 
 return SpriteRole
