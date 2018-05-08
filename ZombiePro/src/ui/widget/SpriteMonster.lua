@@ -38,6 +38,10 @@ function SpriteMonster:ctor(...)
     if DEBUG_MOD then 
         self:drawRect()
     end
+
+     --强制动作   比如monster 需要播放移动的动画 或者其他强行动作的情况 
+    self.isForceAction = false
+     self:addBloodBar(cc.p(0, 60))
 end
 
 function SpriteMonster:scheduleUpdate()
@@ -69,6 +73,10 @@ function SpriteMonster:update(dt)
                 speed = 0
             end
         end
+    end
+
+    if self.isForceAction then 
+        return
     end
 
     --击飞状态下的逻辑
@@ -257,7 +265,7 @@ function SpriteMonster:update(dt)
             local action = cc.MoveTo:create(0.1, targetPos)
             local revAction = cc.MoveTo:create(0.1, cc.p(x, y))
             self:runAction(cc.Sequence:create(action, cc.CallFunc:create(function() 
-                self.gameLayer.mainRole:hurt(20, nil, self)
+                self.gameLayer.mainRole:hurt(1, nil, self)
             end), revAction))  
 
             self.attackTimeCD = self.attackTimeCD + dt
@@ -322,5 +330,22 @@ function SpriteMonster:isAttack()
     local posX, posY = self:getPosition()
     return cc.pGetDistance(cc.p(heroX, heroY), cc.p(posX, posY)) < self.attackRadius + self.gameLayer.mainRole.hurtRadius
 end
+
+function SpriteMonster:getStatus()
+    return self.status
+end
+
+function SpriteMonster:runDeadAnimal()
+    --run animal
+    self.status = 'deaded'
+end 
+
+function SpriteMonster:runHitAnimal()
+    --run animal
+end 
+
+function SpriteMonster:isDead()
+    return self.status == 'deaded' or self.status == 'deading'
+end  
 
 return SpriteMonster

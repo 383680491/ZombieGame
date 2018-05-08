@@ -16,9 +16,14 @@ function SpriteBase:ctor()
     self.warningRadiis = -1  --警戒范围   （-1是全屏 这个参数应该只有怪物会用到，在警戒范围内，会寻找目标攻击）
     self.buffList = {}
     self.lifeStatus = G_Def.STATUS_LIVING
+    self.constVargs = {
+        speed = 3.5,
+        hp = 5
+    }
 
     self.hp = 5
 end
+
 
 function SpriteBase:getHurtRadius()
     return self.hurtRadius
@@ -45,6 +50,14 @@ function SpriteBase:drawRect()
 end
 
 function SpriteBase:hurt(harmValue, buffId)
+    self.hp = self.hp - harmValue
+    if self.hp <= 0 then 
+        self:runDeadAnimal()
+        return 
+    end
+
+    self:runHitAnimal()
+    self:updateBloodBar()
     if buffId then 
         self:addBuff(buffId)
     end
@@ -91,6 +104,28 @@ function SpriteBase:inMapRange(pos)
 
     return cc.rectContainsPoint(rect, pos)
 end
+
+function SpriteBase:addBloodBar(pos)
+    pos = pos or cc.p(0, 100)
+    local barBg = ccui.ImageView:create("hp_pro_bg.png")
+    barBg:setScaleX(0.8)
+    barBg:setPosition(pos)
+    self:addChild(barBg)
+
+    self.bloodProgress = cc.ProgressTimer:create(cc.Sprite:create("hp_pro.png"))  
+    self.bloodProgress:setPosition(cc.p(barBg:getContentSize().width / 2, barBg:getContentSize().height / 2))
+    self.bloodProgress:setType(cc.PROGRESS_TIMER_TYPE_BAR)
+    self.bloodProgress:setAnchorPoint(cc.p(0.5,0.5))
+    self.bloodProgress:setBarChangeRate(cc.p(1, 0))
+    self.bloodProgress:setMidpoint(cc.p(0,1))
+    barBg:addChild(self.bloodProgress)
+    self.bloodProgress:setPercentage(100)
+end
+
+function SpriteBase:updateBloodBar()
+    self.bloodProgress:setPercentage(100 * self.hp / self.constVargs.hp)
+end
+
 
 
 

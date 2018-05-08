@@ -69,19 +69,6 @@ function GameLayer:init()
     self.mainMap:addChild(self.mainRole)
     table.insert(self.roleList, self.mainRole)
 
-    for i= 1, 3 do 
-        local x = math.random(200, 800)
-        local y = math.random(200, 800)
-        local SpriteMonster = require 'ui.widget.SpriteMonster'
-        local monster = SpriteMonster:new(20005)
-        monster:setPosition(cc.p(x, y))
-        monster:setGameLayer(self)
-        self.mainMap:addChild(monster)
-        table.insert(self.monsterList, monster)
-        monster:createPath()
-        monster:findPath(self.mainMap:space2Tile(cc.p(self.mainRole:getPositionX(), self.mainRole:getPositionY())))
-    end
-
     self.mapSize = cc.size(self.mainMap:getMapSize().width * self.mainMap:getTileSize().width,
         self.mainMap:getMapSize().height * self.mainMap:getTileSize().height);
 look(self.mapSize, 'self.mapSize===')
@@ -131,8 +118,8 @@ end
 
 function GameLayer:update(dt)
     --self:setMapScrollPosition(dt);
+    self:deleteObj()
     self:dealCollision()
-    self:deleteMine()
     --self:updateBattleFog();
 end
 
@@ -171,24 +158,42 @@ function GameLayer:onKeyPressed(code, event)
     end
 end
 
-function GameLayer:dealCollision(dt)
-    local monsterCount = #self.monsterList;
-    for monsterIndex = 1, monsterCount do
-        local monster = self.monsterList[monsterIndex];
-        if monster and monster:isDead() then
-            table.remove(self.monsterList, monsterIndex)
-            monster:removeFromParent();  --
-        end
-    end
+-- function GameLayer:dealCollision(dt)
+--     local monsterCount = #self.monsterList;
+--     for monsterIndex = 1, monsterCount do
+--         local monster = self.monsterList[monsterIndex];
+--         if monster and monster:isDead() then
+--             table.remove(self.monsterList, monsterIndex)
+--             monster:removeFromParent();  --
+--         end
+--     end
 
+--     for _, role in ipairs(self.roleList) do 
+--         local rX, rY = role:getPosition()
+--         local list = {}
+--         for _, monster in ipairs(self.monsterList) do 
+--             local mX, mY = monster:getPosition()
+--             local distance = cc.pGetDistance(cc.p(rX, rY), cc.p(mX, mY))
+--             if distance <= role:getAttackRadius() then 
+--                 table.insert(list, monster)
+--             end
+--         end
+
+--         role:setTargetList(list)
+--     end
+-- end
+
+function GameLayer:dealCollision(dt)
     for _, role in ipairs(self.roleList) do 
         local rX, rY = role:getPosition()
         local list = {}
         for _, monster in ipairs(self.monsterList) do 
-            local mX, mY = monster:getPosition()
-            local distance = cc.pGetDistance(cc.p(rX, rY), cc.p(mX, mY))
-            if distance <= role:getAttackRadius() then 
-                table.insert(list, monster)
+            if monster and not monster:isDead() then
+                local mX, mY = monster:getPosition()
+                local distance = cc.pGetDistance(cc.p(rX, rY), cc.p(mX, mY))
+                if distance <= role:getAttackRadius() then 
+                    table.insert(list, monster)
+                end
             end
         end
 
@@ -197,7 +202,8 @@ function GameLayer:dealCollision(dt)
 end
 
 
-function GameLayer:deleteMine()
+function GameLayer:deleteObj()
+    --mine
     for i = 1, #self.mineList do 
         local mine = self.mineList[i]
         if mine and 5 == mine:getStatus() then 
@@ -205,8 +211,21 @@ function GameLayer:deleteMine()
             table.remove(self.mineList, i)
         end
     end
-end
 
+    --monster
+    local monsterCount = #self.monsterList;
+    for monsterIndex = 1, monsterCount do
+        local monster = self.monsterList[monsterIndex];
+        if monster and 'deaded' == monster:getStatus() then
+            for _, role in ipairs(self.roleList) do 
+                role:deleteTarget(monster)
+            end
+
+            table.remove(self.monsterList, monsterIndex)
+            monster:removeFromParent();  --
+        end
+    end
+end
 
 function GameLayer:attack()
     self.mainRole:attack()
@@ -231,10 +250,91 @@ function GameLayer:getHeroStatus()
 end
 
 
+function GameLayer:addMonster()
+    math.newrandomseed()
+
+    local posList = {
+        cc.p(0, 0),
+        cc.p(0, self.winSize.height),
+        cc.p(self.winSize.width, self.winSize.height),
+        cc.p(self.winSize.width, 0),
+    }
+
+    for i= 1, 3 do 
+        local torward = math.random(1, 4)
+        local pos = posList[torward]
+
+        local x = math.random(40, 70)
+        local y = math.random(40, 70)
+
+        if 1 == torward then 
+            pos.x = pos.x + x
+            pos.y = pos.y + y
+        elseif 2 == torward then
+            pos.x = pos.x + x
+            pos.y = pos.y - y
+        elseif 3 == torward then
+            pos.x = pos.x - x
+            pos.y = pos.y - y
+        elseif 4 == torward then
+            pos.x = pos.x - x
+            pos.y = pos.y + y
+        end
+
+        local SpriteMonster = require 'ui.widget.SpriteMonster'
+        local monster = SpriteMonster:new(20005)
+        monster:setPosition(pos)
+        monster:setGameLayer(self)
+        self.mainMap:addChild(monster)
+        table.insert(self.monsterList, monster)
+        monster:createPath()
+        monster:findPath(self.mainMap:space2Tile(cc.p(self.mainRole:getPositionX(), self.mainRole:getPositionY())))
+    end
+end
 
 
 
 
+
+function GameLayer:addBossA()
+    math.newrandomseed()
+
+    local posList = {
+        cc.p(0, 0),
+        cc.p(0, self.winSize.height),
+        cc.p(self.winSize.width, self.winSize.height),
+        cc.p(self.winSize.width, 0),
+    }
+
+    local torward = math.random(1, 4)
+    local pos = posList[torward]
+
+    local x = math.random(40, 70)
+    local y = math.random(40, 70)
+
+    if 1 == torward then 
+        pos.x = pos.x + x
+        pos.y = pos.y + y
+    elseif 2 == torward then
+        pos.x = pos.x + x
+        pos.y = pos.y - y
+    elseif 3 == torward then
+        pos.x = pos.x - x
+        pos.y = pos.y - y
+    elseif 4 == torward then
+        pos.x = pos.x - x
+        pos.y = pos.y + y
+    end
+
+    local SpriteMonster = require 'ui.widget.SpriteBossA '
+    local monster = SpriteMonster:new(20005)
+    monster:setPosition(pos)
+    monster:setGameLayer(self)
+    self.mainMap:addChild(monster)
+    table.insert(self.monsterList, monster)
+    monster:createPath()
+    monster:findPath(self.mainMap:space2Tile(cc.p(self.mainRole:getPositionX(), self.mainRole:getPositionY())))
+end
 
 
 

@@ -5,6 +5,7 @@ local HelpDuringTime = 5   --治疗玩家所需要的时间
 
 local ShieldAnimalLen = 10   --收到攻击后盾相对动画移动的长度
 local ShieldTimeCD = 0.3
+local AttackTimeCD = 0.3
 
 local STATUS_HELP_NULL = 1 
 local STATUS_HELP_STAY = 2 
@@ -58,6 +59,7 @@ function SpriteRole:ctor(...)
     self.lock = false 
     self.curSelectTargetList = {}  --当前锁定的目标
     self.attackRadius = 300
+    self.attackTimeCD = 0
     self:scheduleUpdate()
 
     if DEBUG_MOD then 
@@ -71,6 +73,10 @@ function SpriteRole:ctor(...)
 
     --被攻击的时候 盾会触发一个前移然后后退的一个动画，这段时间移动的方向以该动画为主，如果玩家方向移动了，那盾动的方向就不对了
     self.shiieldAnimalFlag = false 
+
+    self.hp = 200
+    self.constVargs.hp = 200
+    self:addBloodBar(cc.p(0, 60))
 end
 
 function SpriteRole:scheduleUpdate()
@@ -84,6 +90,10 @@ end
 
 
 function SpriteRole:attack()
+    if self.attackTimeCD > 0 then 
+        return
+    end
+
     local selectList = {}
     local posX, posY = self:getPosition()
 
@@ -127,6 +137,7 @@ function SpriteRole:attack()
     self.mainNode:setRotation(270 - angle)
 
     self:displayAttack()
+     self.attackTimeCD = AttackTimeCD
 end
 
 
@@ -260,6 +271,13 @@ function SpriteRole:setGameLayer(gameLayer)
 end
 
 function SpriteRole:update(dt)
+    if self.heroStaus == 'deading' or self.heroStaus == 'deaded' then 
+        return
+    end
+
+    if self.attackTimeCD > 0 then 
+        self.attackTimeCD = self.attackTimeCD - dt
+    end
 
     for bufId, target in pairs(self.buffList) do 
         if target:isOver() then 
@@ -317,6 +335,10 @@ function SpriteRole:move(angle, direct, power)
     --self:getDirByJoyDir(angle, direct)
     --self:getTorwardIDByDir()
     --self:runAnimal()
+
+    if self.heroStaus == 'deading' or self.heroStaus == 'deaded' then 
+        return
+    end
 
     --击飞和眩状态下遥感无效
     if self.strikeFlyInfo then 
@@ -553,7 +575,7 @@ function SpriteRole:displayAttack()
         image:runAction(cc.Sequence:create(cc.FadeOut:create(0.3), cc.CallFunc:create(function(sender) 
             local tar = sender.__userdata__
             sender:removeFromParent()
-            tar:hurt(5, 101)
+            tar:hurt(1, 101)
         end)))
 
         local width = image:getContentSize().width
@@ -569,14 +591,21 @@ function SpriteRole:setTargetList(list)
     self.targetList = list
 end
 
+function SpriteRole:deleteTarget(monster)
+    for idx, mon in ipairs(self.curSelectTargetList) do 
+        if mon == monster then 
+            table.remove(self.curSelectTargetList, idx)
+            break
+        end
+    end
+end
+
 --击飞strikeFly
 function SpriteRole:strikeFly(data)
     self.strikeFlyInfo = data
 end
 
 function SpriteRole:hurt(harmValue, buffId, attackObj)
-    SpriteRole.super.hurt(self, harmValue, buffId)
-
     if self.heroStaus == 'defense' then 
         if self.shieldTimeCD <= 0 then 
             local x, y = self:getPosition()
@@ -605,6 +634,19 @@ function SpriteRole:hurt(harmValue, buffId, attackObj)
         end
     end
 
+    self.hp = self.hp - harmValue
+    if self.hp <= 0 then 
+        self.heroStaus = 'deading'
+        self:runDeadAnimal()
+        return 
+    end
+
+    self:runHitAnimal()
+    self:updateBloodBar()
+    if buffId then 
+        self:addBuff(buffId)
+    end
+
 
 
     --计算伤害
@@ -629,6 +671,19 @@ end
 function SpriteRole:getStatus()
     return self.heroStaus
 end
+
+function SpriteRole:runDeadAnimal()
+    --run animal
+    self.heroStaus = 'deaded'
+end 
+
+function SpriteRole:runHitAnimal()
+    --run animal
+end 
+
+function SpriteRole:isDead()
+    return self.heroStaus == 'deaded' or self.heroStaus == 'deading'
+end  
 
 
 return SpriteRole
