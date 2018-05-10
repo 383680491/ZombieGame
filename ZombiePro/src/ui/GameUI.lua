@@ -125,7 +125,7 @@ function GameUI:btnCallback(tag)
     elseif tag == TAG_MONSTER_2 then
         self.gameLayer:addBossA()
     elseif tag == TAG_MONSTER_3 then
-
+        self.gameLayer:addBossB()
     elseif tag == TAG_MONSTER_4 then
 
     end

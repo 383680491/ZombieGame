@@ -339,6 +339,45 @@ end
 
 
 
+function GameLayer:addBossB()
+    math.newrandomseed()
+
+    local posList = {
+        cc.p(0, 0),
+        cc.p(0, self.winSize.height),
+        cc.p(self.winSize.width, self.winSize.height),
+        cc.p(self.winSize.width, 0),
+    }
+
+    local torward = math.random(1, 4)
+    local pos = posList[torward]
+
+    local x = math.random(40, 70)
+    local y = math.random(40, 70)
+
+    if 1 == torward then 
+        pos.x = pos.x + x
+        pos.y = pos.y + y
+    elseif 2 == torward then
+        pos.x = pos.x + x
+        pos.y = pos.y - y
+    elseif 3 == torward then
+        pos.x = pos.x - x
+        pos.y = pos.y - y
+    elseif 4 == torward then
+        pos.x = pos.x - x
+        pos.y = pos.y + y
+    end
+
+    local SpriteMonster = require 'ui.widget.SpriteBossB'
+    local monster = SpriteMonster:new(20005)
+    monster:setPosition(pos)
+    monster:setGameLayer(self)
+    self.mainMap:addChild(monster)
+    table.insert(self.monsterList, monster)
+    monster:createPath()
+    monster:findPath(self.mainMap:space2Tile(cc.p(self.mainRole:getPositionX(), self.mainRole:getPositionY())))
+end
 
 
 

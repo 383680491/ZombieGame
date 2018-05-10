@@ -23,7 +23,7 @@ function SpriteMonster:ctor(...)
     --self:runAnimal()
     self.mainSprite = ccui.ImageView:create('monster.png')
     self.mainNode = cc.Node:create()
-    self.mainNode:addChild(self.mainSprite)
+    self.mainNode:addChild(self.mainSprite, 1, 1)
     self:addChild(self.mainNode)
 
     self:scheduleUpdate();
