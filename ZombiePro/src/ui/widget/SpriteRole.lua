@@ -74,6 +74,9 @@ function SpriteRole:ctor(...)
     --被攻击的时候 盾会触发一个前移然后后退的一个动画，这段时间移动的方向以该动画为主，如果玩家方向移动了，那盾动的方向就不对了
     self.shiieldAnimalFlag = false 
 
+     --强制动作   比如role 需要播放移动的动画 或者其他强行动作的情况 
+    self.isForceAction = false
+
     self.hp = 200
     self.constVargs.hp = 200
     self:addBloodBar(cc.p(0, 60))
@@ -90,6 +93,10 @@ end
 
 
 function SpriteRole:attack()
+    if self.isForceAction then 
+        return
+    end
+
     if self.attackTimeCD > 0 then 
         return
     end
@@ -144,6 +151,10 @@ end
 
 --
 function SpriteRole:makeMine()
+    if self.isForceAction then 
+        return
+    end
+
     if self.mineNode then 
         return
     end
@@ -176,6 +187,10 @@ function SpriteRole:makeMine()
 end
 
 function SpriteRole:makeDefense()
+    if self.isForceAction then 
+        return
+    end
+
     if not self.spriteShield then 
         self.spriteShield = cc.Sprite:create('shield.png')
         self.mainNode:addChild(self.spriteShield)
@@ -227,6 +242,10 @@ function SpriteRole:judgeHelpFriend(dt)
 end
 
 function SpriteRole:helpFriend()
+    if self.isForceAction then 
+        return
+    end
+
     if self.helpNode then 
         return
     end
@@ -290,6 +309,10 @@ function SpriteRole:update(dt)
         end
     end
 
+    if self.isForceAction then 
+        return
+    end
+
     --击飞状态下的逻辑
     if self.strikeFlyInfo then 
         if self.strikeFlyInfo.time <= 0 then 
@@ -335,6 +358,10 @@ function SpriteRole:move(angle, direct, power)
     --self:getDirByJoyDir(angle, direct)
     --self:getTorwardIDByDir()
     --self:runAnimal()
+
+    if self.isForceAction then 
+        return
+    end
 
     if self.heroStaus == 'deading' or self.heroStaus == 'deaded' then 
         return
@@ -684,6 +711,15 @@ end
 function SpriteRole:isDead()
     return self.heroStaus == 'deaded' or self.heroStaus == 'deading'
 end  
+
+function SpriteRole:beginForceAction()
+    self.isForceAction = true
+end 
+
+function SpriteRole:endForceAction()
+    self.isForceAction = false
+    
+end 
 
 
 return SpriteRole
