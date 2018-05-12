@@ -3,8 +3,8 @@ local SkillCDTime = 3
 local SkillBefore = 0.6
 local SkillAttackRadius = 500     --可以出钩子的距离
 local DuringDt = 0.1              --优化
-local GoziDuringTime = 2              --钩子动画的时长
-local GoziRadius = 25             --钩子的攻击半径
+local GoziDuringTime = 0.5              --钩子动画的时长
+local GoziRadius = 10             --钩子的攻击半径
 
 local STATUS_GOzi_NULL = 1
 local STATUS_GOzi_GO = 2
@@ -32,10 +32,11 @@ function SpriteBossB:update(dt)
             self.isForceAction = true
             self.skillCDTime = 1000000
             self:skill()
+            self.skillAnimalFlag = STATUS_GOzi_GO
         end
 
         if self.skillAnimalFlag == STATUS_GOzi_GO then 
-            if not self.catchTargetFlag and self:isAttackTarget() then 
+            if not self.catchTargetFlag and self:isCatchTarget() then 
                 self.sprGozi:stopAllActions()
                 self.catchTargetFlag = true
                 self.skillAnimalFlag = STATUS_GOzi_Back
@@ -48,9 +49,9 @@ function SpriteBossB:update(dt)
                 self.gameLayer.mainRole:beginForceAction()
             end
 
-            local high = self.sprGozi:getPositionY()
+            local high = self.sprGozi:getPositionY() - self.hurtRadius
             local costTime = (math.abs(high) / self.sprGozi:getContentSize().height) * GoziDuringTime
-            self.sprGozi:runAction(cc.Sequence:create(cc.MoveTo:create(costTime, cc.p(0, 0)), cc.CallFunc:create(function() 
+            self.sprGozi:runAction(cc.Sequence:create(cc.MoveTo:create(costTime, cc.p(0, 0 - self.hurtRadius)), cc.CallFunc:create(function() 
                 self.clip:removeFromParent()
                 self.sprGozi = nil
                 self.nodeGozi = nil
@@ -61,6 +62,7 @@ function SpriteBossB:update(dt)
                 self.skillCDTime = SkillCDTime
 
                 self.gameLayer.mainRole:endForceAction()
+                self.isForceAction = false
             end)))            
         end
 
@@ -70,7 +72,7 @@ function SpriteBossB:update(dt)
     if self.skillAnimalFlag == STATUS_GOzi_Backing then
         if self.catchTargetFlag then 
             local wPos = self.nodeGozi:convertToWorldSpace(cc.p(0, 0))  --把自己转换到世界坐标，然后转入mainMap
-            local Pos = self.gameLayer.mainMap:convertToNodeSpace(wPos)
+            local pos = self.gameLayer.mainMap:convertToNodeSpace(wPos)
             self.gameLayer.mainRole:setPosition(pos)
         end
     end
@@ -108,17 +110,15 @@ function SpriteBossB:skill()
     self.nodeGozi = cc.Node:create()
     self.nodeGozi:setPosition(cc.p(size.width / 2,  GoziRadius))  --看图片的钩子的大小 node放到正中心  然后看作圆来判断是否勾到英雄  半径用25来判断
     self.sprGozi:addChild(self.nodeGozi)
-
-    local sp = cc.Sprite:create('progress.png')
-    sp:setScale(0.3)
-    self.nodeGozi:addChild(sp)
-
-    self.skillAnimalFlag = true
 end
 
 function SpriteBossB:isSkillAttack()
     local heroX, heroY = self.gameLayer.mainRole:getPosition()
     local posX, posY = self:getPosition()
+
+    if not self.gameLayer.mainRole:isCanAttack() then   --英雄是否可以被技能攻击
+        return false
+    end
 
     local isLen = cc.pGetDistance(cc.p(heroX, heroY), cc.p(posX, posY)) < self.skillAttackRadius
     if not isLen then 
@@ -128,7 +128,7 @@ function SpriteBossB:isSkillAttack()
     return not self.gameLayer.mainMap:pathHasBlock(cc.p(posX, posY), cc.p(heroX, heroY))
 end
 
-function SpriteBossB:isAttackTarget()
+function SpriteBossB:isCatchTarget()
     local wPos = self.nodeGozi:convertToWorldSpace(cc.p(0, 0))  --把自己转换到世界坐标，然后转入mainMap
     local Pos = self.gameLayer.mainMap:convertToNodeSpace(wPos)
     local tx, ty = self.gameLayer.mainRole:getPosition()

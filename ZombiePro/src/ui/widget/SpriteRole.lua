@@ -633,6 +633,10 @@ function SpriteRole:strikeFly(data)
 end
 
 function SpriteRole:hurt(harmValue, buffId, attackObj)
+    if self.isForceAction then 
+        return
+    end
+
     if self.heroStaus == 'defense' then 
         if self.shieldTimeCD <= 0 then 
             local x, y = self:getPosition()
@@ -693,6 +697,11 @@ function SpriteRole:hurt(harmValue, buffId, attackObj)
         cc.CallFunc:create(function(pender)  pender:removeFromParent() end)
     ))
 end
+
+--暂时只有 self.isForceAction  这个时候算是无敌
+function SpriteRole:isCanAttack()
+    return not self.isForceAction
+end 
 
 --获得英雄状态
 function SpriteRole:getStatus()

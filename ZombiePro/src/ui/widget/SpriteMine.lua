@@ -90,7 +90,7 @@ function SpriteMine:update(dt)
             local roleRadius = role:getHurtRadius()
             
             if G_Utils.circleIntersect(cc.p(x, y), self.attackRadiis, cc.p(posX, posY), roleRadius) then 
-                role:hurt(20, 102)
+                role:hurt(2, 102)
 
                 local dir = G_Utils.getDirVector(cc.p(x, y), cc.p(posX, posY))
                 local perFrame = (Strike_Len / Strike_Time)/60   --每帧的速度
@@ -106,7 +106,7 @@ function SpriteMine:update(dt)
             local mRadius = monster:getHurtRadius()
 
             if G_Utils.circleIntersect(cc.p(x, y), self.attackRadiis, cc.p(mX, mY), mRadius) then 
-                monster:hurt(20, 102)
+                monster:hurt(2, 102)
                 local dir = G_Utils.getDirVector(cc.p(x, y), cc.p(mX, mY))
                 local perFrame = (Strike_Len / Strike_Time)/60   --每帧的速度
                 dir = cc.pMul(dir, perFrame)
